@@ -1,0 +1,24 @@
+{
+    "name": "ExPing-t",
+    "version": "0.0.1",
+    "manifest_version": 2,
+    "description": "Change color of Ping-t background-color",
+    "icons": {
+        "16":  "icons/ExPing-t16.png",
+        "48":  "icons/ExPing-t48.png",
+        "128": "icons/ExPing-t128.png"
+    },
+    "content_scripts": [{
+        "matches": ["https://ping-t.com/*"],
+        "js": ["content.js"],
+        "css": ["style.css"],
+        "run_at": "document_start"
+    }],
+    "permissions": [
+        "storage"
+    ],
+    "options_ui": {
+        "page": "options.html",
+        "chrome_style": true
+    }
+}
