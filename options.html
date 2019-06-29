@@ -3,16 +3,37 @@
 <head>
   <title>Chrome Extension Options</title>
   <style>
-    #colorbox { padding: 5px 15px 5px 15px; }
     #save { padding-left: 5px; }
+    td { border-style: none; }
   </style>
 </head>
 
 <body>
-    Color:&nbsp;#
-    <input type="text" size="6" maxlength="6" placeholder="F0F0F0" id="bgcolor">
-    <span id="colorbox"></span>
-    <button id="save">Save</button>
+    <table>
+        <tr>
+            <td>Background-color:&nbsp;#</td>
+            <td><input type="text" size="6" maxlength="6" placeholder="F0F0F0" id="bgcolor"></td>
+        </tr>
+        <tr>
+            <td>Memo-display:&nbsp;</td>
+            <td><input type="checkbox" id="disp_memo"></td>
+        </tr>
+        <tr>
+            <td>Memo-col:&nbsp;</td>
+            <td><input type="text" size="3" maxlength="4" placeholder="64" id="memo_col"></td>
+        </tr>
+        <tr>
+            <td>Memo-row:&nbsp;</td>
+            <td><input type="text" size="3" maxlength="4" placeholder="1" id="memo_row"></td>
+        </tr>
+        <tr>
+            <td>Memo-font-size:&nbsp;</td>
+            <td><input type="text" size="3" maxlength="4" id="memo_font_size"></td>
+        </tr>
+        <tr>
+            <td><button id="save">Save</button></td>
+        </tr>
+    </table>
     <div id="status"></div>
     <script src="options.js"></script>
 </body>
