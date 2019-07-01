@@ -13,9 +13,10 @@
 
         // 癒し画像の表示
         var selected_image_right = items.selected_image_right;
+        var selected_image_width = items.selected_image_width;
         //"<img src=" + "'file:///C:/Tux.png'" + " width=10% align='right'/>"+
         mondai_info.insertAdjacentHTML('beforeend',
-        "<img src=" + selected_image_right + " width=10% align='right'/>");
+        "<img src=" + selected_image_right + " width=" + selected_image_width + "% align='right'/>");
 
         // 共通メモの表示
         if(items.selected_disp_memo == true) {

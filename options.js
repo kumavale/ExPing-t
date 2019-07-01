@@ -3,18 +3,7 @@ function save_options() {
 
     // 設定値を変数に格納
     var bgcolor        = document.getElementById('bgcolor').value;
-
-    //var image_right;
-    //var file = document.getElementById('image_right').files[0];
-    //var fr = new FileReader();
-
-    //if(file) {
-    //    fr.readAsDataURL(file);
-    //}
-    //fr.onload = function() {
-    //    image_right = fr.result;
-    //}
-
+    var image_width    = document.getElementById('image_size').value;
     var disp_memo      = document.getElementById('disp_memo').checked;
     var memo_col       = document.getElementById('memo_col').value;
     var memo_row       = document.getElementById('memo_row').value;
@@ -26,6 +15,7 @@ function save_options() {
     // chromeアカウントと紐づくストレージに保存
     chrome.storage.local.set({
         selected_bgcolor:        bgcolor,
+        selected_image_width:    image_width,
         selected_disp_memo:      disp_memo,
         selected_memo_col:       memo_col,
         selected_memo_row:       memo_row,
@@ -47,7 +37,8 @@ function restore_options() {
     // デフォルト値は、ここで設定する
     chrome.storage.local.get({
         selected_bgcolor:        'F0F0F0',
-        selected_image_right:    '',
+        //selected_image_right:    '',
+        selected_image_width:    '10',
         selected_memo:           '',
         selected_disp_memo:      'false',
         selected_memo_col:       '64',
@@ -57,7 +48,8 @@ function restore_options() {
     // 保存された値があったら、それを使う
     }, function(items) {
         document.getElementById('bgcolor').value        = items.selected_bgcolor;
-        document.getElementById('image_right').checked  = items.selected_image_right;
+        //document.getElementById('image_right').       = items.selected_image_right;
+        document.getElementById('image_width').value    = items.selected_image_width;
         document.getElementById('disp_memo').checked    = items.selected_disp_memo;
         document.getElementById('memo_col').value       = items.selected_memo_col;
         document.getElementById('memo_row').value       = items.selected_memo_row;
