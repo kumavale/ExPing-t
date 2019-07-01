@@ -4,7 +4,10 @@
   <title>Chrome Extension Options</title>
   <style>
     #save { padding-left: 5px; }
-    td { border-style: none; }
+    td {
+        border-style: none;
+        white-space: nowrap;
+    }
   </style>
 </head>
 
@@ -13,6 +16,14 @@
         <tr>
             <td>Background-color:&nbsp;#</td>
             <td><input type="text" size="6" maxlength="6" placeholder="F0F0F0" id="bgcolor"></td>
+        </tr>
+        <tr>
+            <td>Image:</td>
+            <td><input type="file" accept='image/*' id="image_right"></td>
+        </tr>
+        <tr>
+            <td>Image-size(%):</td>
+            <td><input type="text" size="3" maxlength="4" placeholder="10" id="image_size"></td>
         </tr>
         <tr>
             <td>Memo-display:&nbsp;</td>

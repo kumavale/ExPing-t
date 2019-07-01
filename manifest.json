@@ -14,11 +14,20 @@
         "css": ["style.css"],
         "run_at": "document_start"
     }],
+    "background": "background.js",
     "permissions": [
-        "storage"
+        "storage",
+        "tabs"
     ],
     "options_ui": {
         "page": "options.html",
         "chrome_style": true
+    },
+    "Web_accessible_resources": [
+        "*.png"
+    ],
+    "browser_action": {
+        "default_title": "ExPing-t",
+        "default_popup": "popup.html"
     }
 }
