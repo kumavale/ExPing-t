@@ -26,7 +26,7 @@
             mondai_info.insertAdjacentHTML('beforeend',
                 "<br />" +
                 "共通メモ:&nbsp;"+
-                "<textarea cols='" + col + "' rows='" + row + "' style='font-size: " + font_size + "px;' id='memo_area'>" + memo_value + "</textarea>"+
+                "<textarea cols='" + col + "' rows='" + row + "' style='font-size: " + font_size + "px;' id='memo_area' placeholder='Alt+Enter to Save'>" + memo_value + "</textarea>"+
                 "<input type='button' id='memo_save' value='保存' />"+
                 "<input type='button' id='memo_delete' value='削除' />"+
                 "<style>#memo_area { vertical-align: middle; }</style>");
@@ -56,3 +56,10 @@ window.addEventListener('click', function(e) {
         onclick_memo_delete();
     }
 }, false)
+
+window.addEventListener('keydown', function(e) {
+    const key_enter = 13;
+    if(e.altKey && e.keyCode == key_enter) {
+        onclick_memo_save();
+    }
+})
