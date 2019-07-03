@@ -32,6 +32,9 @@
                 "<input type='button' id='memo_save' value='保存' />"+
                 "<input type='button' id='memo_delete' value='削除' />"+
                 "<input type='button' id='html_save' value='HTML' />"+
+                "&nbsp;&nbsp;"+
+                "<input type='button' id='ex_prev' value='戻る(p)' />"+
+                "<input type='button' id='ex_next' value='次へ(n)' />"+
                 "<style>#memo_area { vertical-align: middle; }</style>");
         }
     });
@@ -61,6 +64,23 @@ function onclick_html_save() {
     var body = document.getElementById('ViewMondai').children[0].cloneNode(true);
     var info = document.getElementById('mondai_info').innerHTML;
     var id   = info.substr(info.indexOf('問題ID')+6, 5);
+
+    //var nodes = body.querySelectorAll('[src]');
+    //for(var i=0; i<nodes.length; ++i) {
+    //    var url = nodes[i].src;
+    //    var xhr = new XMLHttpRequest();
+    //    xhr.onload = function() {
+    //        var reader = new FileReader();
+    //        reader.onloadend = function() {
+    //            nodes[i].src = reader.result;
+    //        }
+    //        reader.readAsDataURL(xhr.response);
+    //    };
+    //    xhr.open('GET', url);
+    //    xhr.responseType = 'blob';
+    //    xhr.send();
+    //}
+
     body.querySelectorAll('#kaisetu')[0].style.display = 'inline';
     var head   = '<head><meta charset="UTF-8"><title>' + id + '</title></head>';
     var blob    = new Blob(['<!DOCTYPE HTML>\n<html lang="ja">\n', head, '\n', body.innerHTML, '\n</html>']);
@@ -82,6 +102,12 @@ window.addEventListener('click', function(e) {
     }
     if(e.target.id == 'html_save') {
         onclick_html_save();
+    }
+    if(e.target.id == 'ex_prev') {
+        document.getElementsByName('back')[0].click();
+    }
+    if(e.target.id == 'ex_next') {
+        document.getElementById('next').click();
     }
 }, false)
 
