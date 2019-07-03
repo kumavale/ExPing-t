@@ -12,10 +12,12 @@
         var mondai_info = document.getElementById('mondai_info');
 
         // 癒し画像の表示
-        var selected_image_right = items.selected_image_right;
-        var selected_image_width = items.selected_image_width;
-        mondai_info.insertAdjacentHTML('beforeend',
-        "<img src=" + selected_image_right + " width=" + selected_image_width + "% align='right'/>");
+        if(items.selected_disp_image == true) {
+            var selected_image_right = items.selected_image_right;
+            var selected_image_width = items.selected_image_width;
+            mondai_info.insertAdjacentHTML('beforeend',
+            "<img src=" + selected_image_right + " width=" + selected_image_width + "% align='right'/>");
+        }
 
         // 共通メモの表示
         if(items.selected_disp_memo == true) {
@@ -60,7 +62,8 @@ function onclick_html_save() {
     var info = document.getElementById('mondai_info').innerHTML;
     var id   = info.substr(info.indexOf('問題ID')+6, 5);
     body.querySelectorAll('#kaisetu')[0].style.display = 'inline';
-    var blob    = new Blob(['<!DOCTYPE HTML>\n<html>\n', body.innerHTML, '\n</html>']);
+    var head   = '<head><meta charset="UTF-8"><title>' + id + '</title></head>';
+    var blob    = new Blob(['<!DOCTYPE HTML>\n<html lang="ja">\n', head, '\n', body.innerHTML, '\n</html>']);
     var url     = window.URL || window.webkitURL;
     var blobURL = url.createObjectURL(blob);
 

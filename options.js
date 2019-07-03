@@ -3,6 +3,7 @@ function save_options() {
 
     // 設定値を変数に格納
     var bgcolor        = document.getElementById('bgcolor').value;
+    var disp_image     = document.getElementById('disp_image').checked;
     var image_width    = document.getElementById('image_size').value;
     var disp_memo      = document.getElementById('disp_memo').checked;
     var memo_col       = document.getElementById('memo_col').value;
@@ -15,6 +16,7 @@ function save_options() {
     // chromeアカウントと紐づくストレージに保存
     chrome.storage.local.set({
         selected_bgcolor:        bgcolor,
+        selected_disp_image:     disp_image,
         selected_image_width:    image_width,
         selected_disp_memo:      disp_memo,
         selected_memo_col:       memo_col,
@@ -38,6 +40,7 @@ function restore_options() {
     chrome.storage.local.get({
         selected_bgcolor:        'F0F0F0',
         //selected_image_right:    '',
+        selected_disp_image:     'false',
         selected_image_width:    '10',
         selected_memo:           '',
         selected_disp_memo:      'false',
@@ -48,6 +51,7 @@ function restore_options() {
     // 保存された値があったら、それを使う
     }, function(items) {
         document.getElementById('bgcolor').value        = items.selected_bgcolor;
+        document.getElementById('disp_image').checked   = items.selected_disp_image;
         //document.getElementById('image_right').       = items.selected_image_right;
         document.getElementById('image_size').value     = items.selected_image_width;
         document.getElementById('disp_memo').checked    = items.selected_disp_memo;
