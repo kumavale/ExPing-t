@@ -14,7 +14,6 @@
         // 癒し画像の表示
         var selected_image_right = items.selected_image_right;
         var selected_image_width = items.selected_image_width;
-        //"<img src=" + "'file:///C:/Tux.png'" + " width=10% align='right'/>"+
         mondai_info.insertAdjacentHTML('beforeend',
         "<img src=" + selected_image_right + " width=" + selected_image_width + "% align='right'/>");
 
@@ -23,32 +22,37 @@
             var col = items.selected_memo_col;
             var row = items.selected_memo_row;
             var font_size = items.selected_memo_font_size;
-            //var memo_value = items.selected_memo;
-            var memo_value = '';
+            var memo_value = items.selected_memo;
             mondai_info.insertAdjacentHTML('beforeend',
                 "<br />" +
                 "共通メモ:&nbsp;"+
                 "<textarea cols='" + col + "' rows='" + row + "' style='font-size: " + font_size + "px;' id='memo_area'>" + memo_value + "</textarea>"+
-                "<input type='button' id='memo_save' value='保存' onclick='onclick_memo_save();'/>"+
-                "<input type='button' id='memo_delete' value='削除' onclick='onclick_memo_delete();'/>"+
+                "<input type='button' id='memo_save' value='保存' />"+
+                "<input type='button' id='memo_delete' value='削除' />"+
                 "<style>#memo_area { vertical-align: middle; }</style>");
         }
     });
 };
 
 function onclick_memo_save() {
-    //chrome.storage.local.set({
-    //    selected_memo: document.getElementById('memo_area').value,
-    //});
-    alert(1);
+    chrome.storage.local.set({
+        selected_memo: document.getElementById('memo_area').value,
+    });
 }
 
 function onclick_memo_delete() {
     chrome.storage.local.set({
         selected_memo: '',
     }, function() {
-        alert(1);
         document.getElementById('memo_area').value = '';
     });
 }
 
+window.addEventListener('click', function(e) {
+    if(e.target.id == 'memo_save') {
+        onclick_memo_save();
+    }
+    if(e.target.id == 'memo_delete') {
+        onclick_memo_delete();
+    }
+}, false)

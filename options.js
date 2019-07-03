@@ -41,7 +41,7 @@ function restore_options() {
         selected_image_width:    '10',
         selected_memo:           '',
         selected_disp_memo:      'false',
-        selected_memo_col:       '64',
+        selected_memo_col:       '50',
         selected_memo_row:       '1',
         selected_memo_font_size: '',
 
@@ -49,7 +49,7 @@ function restore_options() {
     }, function(items) {
         document.getElementById('bgcolor').value        = items.selected_bgcolor;
         //document.getElementById('image_right').       = items.selected_image_right;
-        document.getElementById('image_width').value    = items.selected_image_width;
+        document.getElementById('image_size').value     = items.selected_image_width;
         document.getElementById('disp_memo').checked    = items.selected_disp_memo;
         document.getElementById('memo_col').value       = items.selected_memo_col;
         document.getElementById('memo_row').value       = items.selected_memo_row;
