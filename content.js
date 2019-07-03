@@ -29,10 +29,17 @@
                 "<textarea cols='" + col + "' rows='" + row + "' style='font-size: " + font_size + "px;' id='memo_area' placeholder='Alt+Enter to Save'>" + memo_value + "</textarea>"+
                 "<input type='button' id='memo_save' value='保存' />"+
                 "<input type='button' id='memo_delete' value='削除' />"+
+                "<input type='button' id='html_save' value='HTML' />"+
                 "<style>#memo_area { vertical-align: middle; }</style>");
         }
     });
 };
+
+function delete_element(id) {
+    var obj = document.getElementById(id);
+    var obj_parent = obj.parentNode;
+    obj_parent.removeChild(obj);
+}
 
 function onclick_memo_save() {
     chrome.storage.local.set({
@@ -42,10 +49,25 @@ function onclick_memo_save() {
 
 function onclick_memo_delete() {
     chrome.storage.local.set({
-        selected_memo: '',
+        selected_memo: ''
     }, function() {
         document.getElementById('memo_area').value = '';
     });
+}
+
+function onclick_html_save() {
+    var body = document.getElementById('ViewMondai').children[0].cloneNode(true);
+    var info = document.getElementById('mondai_info').innerHTML;
+    var id   = info.substr(info.indexOf('問題ID')+6, 5);
+    body.querySelectorAll('#kaisetu')[0].style.display = 'inline';
+    var blob    = new Blob(['<!DOCTYPE HTML>\n<html>\n', body.innerHTML, '\n</html>']);
+    var url     = window.URL || window.webkitURL;
+    var blobURL = url.createObjectURL(blob);
+
+    var a = document.createElement('a');
+    a.download = id + '.html';
+    a.href = blobURL;
+    a.click();
 }
 
 window.addEventListener('click', function(e) {
@@ -54,6 +76,9 @@ window.addEventListener('click', function(e) {
     }
     if(e.target.id == 'memo_delete') {
         onclick_memo_delete();
+    }
+    if(e.target.id == 'html_save') {
+        onclick_html_save();
     }
 }, false)
 
