@@ -9,6 +9,7 @@ function save_options() {
     var memo_col       = document.getElementById('memo_col').value;
     var memo_row       = document.getElementById('memo_row').value;
     var memo_font_size = document.getElementById('memo_font_size').value;
+    var hist_coloring  = document.getElementById('hist_coloring').checked;
 
     // 背景色を指定色に変更
     document.getElementsByTagName('body')[0].style.backgroundColor = "#" + bgcolor;
@@ -22,12 +23,12 @@ function save_options() {
         selected_memo_col:       memo_col,
         selected_memo_row:       memo_row,
         selected_memo_font_size: memo_font_size,
+        selected_hist_coloring:  hist_coloring,
 
     }, function() {
         // 保存できたら、画面にメッセージを表示
         var status = document.getElementById('status');
         status.textContent = 'Options saved.';
-        //status.textContent = image_right;
         setTimeout(function() {
           status.textContent = '';
         }, 2000);
@@ -47,17 +48,19 @@ function restore_options() {
         selected_memo_col:       '50',
         selected_memo_row:       '1',
         selected_memo_font_size: '',
+        selected_hist_coloring:  'true',
 
     // 保存された値があったら、それを使う
     }, function(items) {
-        document.getElementById('bgcolor').value        = items.selected_bgcolor;
-        document.getElementById('disp_image').checked   = items.selected_disp_image;
-        //document.getElementById('image_right').       = items.selected_image_right;
-        document.getElementById('image_size').value     = items.selected_image_width;
-        document.getElementById('disp_memo').checked    = items.selected_disp_memo;
-        document.getElementById('memo_col').value       = items.selected_memo_col;
-        document.getElementById('memo_row').value       = items.selected_memo_row;
-        document.getElementById('memo_font_size').value = items.selected_memo_font_size;
+        document.getElementById('bgcolor').value         = items.selected_bgcolor;
+        document.getElementById('disp_image').checked    = items.selected_disp_image;
+        //document.getElementById('image_right').        = items.selected_image_right;
+        document.getElementById('image_size').value      = items.selected_image_width;
+        document.getElementById('disp_memo').checked     = items.selected_disp_memo;
+        document.getElementById('memo_col').value        = items.selected_memo_col;
+        document.getElementById('memo_row').value        = items.selected_memo_row;
+        document.getElementById('memo_font_size').value  = items.selected_memo_font_size;
+        document.getElementById('hist_coloring').checked = items.selected_hist_coloring;
     });
 }
 

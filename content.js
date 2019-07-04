@@ -10,6 +10,7 @@
         //container.style.backgroundColor = '#E6E6E6';
 
         var mondai_info = document.getElementById('mondai_info');
+        let tabURL = window.location.href;
 
         // 癒し画像の表示
         if(items.selected_disp_image == true && mondai_info) {
@@ -37,11 +38,11 @@
                     "&nbsp;&nbsp;"+
                     "<input type='button' id='ex_prev' value='戻る(p)' />"+
                     "<input type='button' id='ex_next' value='次へ(n)' />"+
+                    "<div id='memo_status'></div>"+
                     "<style>#memo_area { vertical-align: middle; }</style>");
             }
 
             // リザルト画面
-            let tabURL = window.location.href;
             if(tabURL.match(/https?:\/\/ping-t.com\/.*\/kakumon_histories/)) {
                 let kh;
                 if(tabURL.match(/index/)) {
@@ -57,6 +58,7 @@
                         "<textarea cols='" + col + "' rows='" + row + "' style='font-size: " + font_size + "px;' id='memo_area' placeholder='Alt+Enter to Save'>" + memo_value + "</textarea>"+
                         "<input type='button' id='memo_save' value='保存' />"+
                         "<input type='button' id='memo_delete' value='削除' />"+
+                        "<div id='memo_status'></div>"+
                         "<style>#memo_area { vertical-align: middle; }</style>"+
                         "<br />");
                     memo_set_cursor();
@@ -64,6 +66,38 @@
             }
         }
 
+        // Historyの色分け/曜日
+        if(items.selected_hist_coloring == true) {
+            const Su = "#FFB2B2";
+            const Mo = "#FFB2FF";
+            const Tu = "#D8B2FF";
+            const We = "#B2D8FF";
+            const Th = "#B2FFD8";
+            const Fr = "#FFFFB2";
+            const St = "#FFD8B2";
+
+            if(tabURL.match(/https?:\/\/ping-t.com\/.*\/study_histories/)) {
+                var histories = document.getElementsByClassName('list_table');
+                if(histories) {
+                    for(let i=0, len=histories.length; i<len; ++i) {
+                        if(histories[i].children[2].innerHTML.match(/日/))
+                            histories[i].style.backgroundColor = Su;
+                        else if(histories[i].children[2].innerHTML.match(/月/))
+                            histories[i].style.backgroundColor = Mo;
+                        else if(histories[i].children[2].innerHTML.match(/火/))
+                            histories[i].style.backgroundColor = Tu;
+                        else if(histories[i].children[2].innerHTML.match(/水/))
+                            histories[i].style.backgroundColor = We;
+                        else if(histories[i].children[2].innerHTML.match(/木/))
+                            histories[i].style.backgroundColor = Th;
+                        else if(histories[i].children[2].innerHTML.match(/金/))
+                            histories[i].style.backgroundColor = Fr;
+                        else if(histories[i].children[2].innerHTML.match(/土/))
+                            histories[i].style.backgroundColor = St;
+                    }
+                }
+            }
+        }
     });
 };
 
@@ -76,7 +110,11 @@ function onclick_memo_save() {
     chrome.storage.local.set({
         selected_memo: document.getElementById('memo_area').value,
     }, function() {
-        // 保存成功時の処理
+        var status = document.getElementById('memo_status');
+        status.textContent = 'saved';
+        setTimeout(function() {
+          status.textContent = '';
+        }, 1000);
     });
 }
 
