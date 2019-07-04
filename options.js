@@ -28,9 +28,11 @@ function save_options() {
     }, function() {
         // 保存できたら、画面にメッセージを表示
         var status = document.getElementById('status');
-        status.textContent = 'Options saved.';
+        //status.textContent = 'Options saved.';
+        status.style.visibility = "visible";
         setTimeout(function() {
-          status.textContent = '';
+          //status.textContent = '&nbsp;';
+            status.style.visibility = "hidden";
         }, 2000);
     });
 }
