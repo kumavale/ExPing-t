@@ -16,7 +16,7 @@
             let selected_image_right = items.selected_image_right;
             let selected_image_width = items.selected_image_width;
             mondai_info.insertAdjacentHTML('beforeend',
-            "<img src=" + selected_image_right + " width=" + selected_image_width + "% align='right'/>");
+            "<img src='" + selected_image_right + "' width=" + selected_image_width + "% align='right'/>");
         }
 
         // 共通メモの表示
@@ -75,6 +75,8 @@ function memo_set_cursor() {
 function onclick_memo_save() {
     chrome.storage.local.set({
         selected_memo: document.getElementById('memo_area').value,
+    }, function() {
+        // 保存成功時の処理
     });
 }
 
@@ -146,3 +148,4 @@ window.addEventListener('keydown', function(e) {
         onclick_memo_save();
     }
 })
+

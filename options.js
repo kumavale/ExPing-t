@@ -75,6 +75,15 @@ document.getElementById('image_right').addEventListener('change', function (e) {
         chrome.storage.local.set({
             selected_image_right: image_right
         });
+        document.getElementsByTagName('body')[0].insertAdjacentHTML('beforeend',
+            "<style>"+
+            "body {"+
+                "background-image: url(" + image_right + ");"+
+                "background-position: right bottom;"+
+                "background-repeat: no-repeat;"+
+                "background-size: 25%;"+
+            "}"+
+            "</style>");
     }
     fileReader.readAsDataURL(file);
 });
