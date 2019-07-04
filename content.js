@@ -12,38 +12,64 @@
         var mondai_info = document.getElementById('mondai_info');
 
         // 癒し画像の表示
-        if(items.selected_disp_image == true) {
-            var selected_image_right = items.selected_image_right;
-            var selected_image_width = items.selected_image_width;
+        if(items.selected_disp_image == true && mondai_info) {
+            let selected_image_right = items.selected_image_right;
+            let selected_image_width = items.selected_image_width;
             mondai_info.insertAdjacentHTML('beforeend',
             "<img src=" + selected_image_right + " width=" + selected_image_width + "% align='right'/>");
         }
 
         // 共通メモの表示
         if(items.selected_disp_memo == true) {
-            var col = items.selected_memo_col;
-            var row = items.selected_memo_row;
-            var font_size = items.selected_memo_font_size;
-            var memo_value = items.selected_memo;
-            mondai_info.insertAdjacentHTML('beforeend',
-                "<br />" +
-                "共通メモ:&nbsp;"+
-                "<textarea cols='" + col + "' rows='" + row + "' style='font-size: " + font_size + "px;' id='memo_area' placeholder='Alt+Enter to Save'>" + memo_value + "</textarea>"+
-                "<input type='button' id='memo_save' value='保存' />"+
-                "<input type='button' id='memo_delete' value='削除' />"+
-                "<input type='button' id='html_save' value='HTML' />"+
-                "&nbsp;&nbsp;"+
-                "<input type='button' id='ex_prev' value='戻る(p)' />"+
-                "<input type='button' id='ex_next' value='次へ(n)' />"+
-                "<style>#memo_area { vertical-align: middle; }</style>");
+            let col = items.selected_memo_col;
+            let row = items.selected_memo_row;
+            let font_size = items.selected_memo_font_size;
+            let memo_value = items.selected_memo;
+
+            if(mondai_info) {
+                mondai_info.insertAdjacentHTML('beforeend',
+                    "<br />" +
+                    "共通メモ:&nbsp;"+
+                    "<textarea cols='" + col + "' rows='" + row + "' style='font-size: " + font_size + "px;' id='memo_area' placeholder='Alt+Enter to Save'>" + memo_value + "</textarea>"+
+                    "<input type='button' id='memo_save' value='保存' />"+
+                    "<input type='button' id='memo_delete' value='削除' />"+
+                    "<input type='button' id='html_save' value='HTML' />"+
+                    "&nbsp;&nbsp;"+
+                    "<input type='button' id='ex_prev' value='戻る(p)' />"+
+                    "<input type='button' id='ex_next' value='次へ(n)' />"+
+                    "<style>#memo_area { vertical-align: middle; }</style>");
+            }
+
+            // リザルト画面
+            let tabURL = window.location.href;
+            if(tabURL.match(/https?:\/\/ping-t.com\/.*\/kakumon_histories/)) {
+                let kh;
+                if(tabURL.match(/index/)) {
+                    kh = document.getElementsByClassName('kakumonHistories');
+                }
+                else if(tabURL.match(/view/)) {
+                    kh = document.getElementsByClassName('kakumonHistory');
+                }
+
+                if(kh) {
+                    kh[0].children[1].insertAdjacentHTML('afterbegin',
+                        "共有メモ:&nbsp;"+
+                        "<textarea cols='" + col + "' rows='" + row + "' style='font-size: " + font_size + "px;' id='memo_area' placeholder='Alt+Enter to Save'>" + memo_value + "</textarea>"+
+                        "<input type='button' id='memo_save' value='保存' />"+
+                        "<input type='button' id='memo_delete' value='削除' />"+
+                        "<style>#memo_area { vertical-align: middle; }</style>"+
+                        "<br />");
+                    memo_set_cursor();
+                }
+            }
         }
+
     });
 };
 
-function delete_element(id) {
-    var obj = document.getElementById(id);
-    var obj_parent = obj.parentNode;
-    obj_parent.removeChild(obj);
+function memo_set_cursor() {
+    let area = document.getElementById('memo_area');
+    area.setSelectionRange(-1, -1);
 }
 
 function onclick_memo_save() {
@@ -94,6 +120,9 @@ function onclick_html_save() {
 }
 
 window.addEventListener('click', function(e) {
+    if(e.target.id == 'memo_area') {
+        memo_set_cursor();
+    }
     if(e.target.id == 'memo_save') {
         onclick_memo_save();
     }
