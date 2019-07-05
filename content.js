@@ -163,7 +163,7 @@ function onclick_memo_delete() {
 function onclick_html_save() {
     var body = document.getElementById('ViewMondai').children[0].cloneNode(true);
     var info = document.getElementById('mondai_info').innerHTML;
-    var id   = info.substr(info.indexOf('問題ID')+6, 5);
+    var id   = info.match(/問題ID\D+\d+/)[0].match(/\d+/);
 
     // 画像PathをBase64に変換
     //var nodes = body.querySelectorAll('[src]');
