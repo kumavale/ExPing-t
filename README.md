@@ -1,4 +1,4 @@
-# ExPing-t
+# ExPing-t ![](https://github.com/yorimoi/ExPing-t/blob/master/icons/ExPing-t16.png)
 ![under_development](https://img.shields.io/badge/-%e9%96%8b%e7%99%ba%e4%b8%ad-important.svg)  
 
 [Ping-t](https://ping-t.com/)のGoogleChrome拡張機能です.  
@@ -11,8 +11,8 @@
 * HTMLの保存(途中)  
 * Historyの色分け  
 * `戻る`,`次へ`ボタンを画面上部に  
+* 現在の問題番号をメモに追記  
 
 ## TODO
 * キッチンタイマー(時間指定), ストップウォッチ(自動)  
-* 現在の問題番号をメモに追記  
 

@@ -1,11 +1,15 @@
-﻿window.onload = function() {
+﻿// 動作確認は LPIC202 を用いています
+
+window.onload = function() {
     chrome.storage.local.get(null, function(items) {
         var selected_bgcolor = items.selected_bgcolor;
         var bgcolor = "#" + selected_bgcolor;
 
-        // 背景色の変更
+        // 全体の背景色の変更
         var body = document.getElementsByTagName('body');
         body[0].style.cssText = "background-color: " + bgcolor + " !important;";
+
+        // 全体の背景色以外の設定
         //var container = document.getElementById('container');
         //container.style.backgroundColor = '#E6E6E6';
 
@@ -20,6 +24,15 @@
             "<img src='" + selected_image_right + "' width=" + selected_image_width + "% align='right'/>");
         }
 
+        // タイマー(ストップウォッチ)の表示
+        // TODO
+        if(items.selected_disp_timer == true) {
+            if(mondai_info) {
+                mondai_info.insertAdjacentHTML('beforeend',
+                    "&nbsp;&nbsp;XX分&nbsp;経過");
+            }
+        }
+
         // 共通メモの表示
         if(items.selected_disp_memo == true) {
             let col = items.selected_memo_col;
@@ -32,6 +45,7 @@
                     "<br />" +
                     "共通メモ:&nbsp;"+
                     "<textarea cols='" + col + "' rows='" + row + "' style='font-size: " + font_size + "px;' id='memo_area' placeholder='Alt+Enter to Save'>" + memo_value + "</textarea>"+
+                    "<input type='button' id='memo_num' value='番号' />"+
                     "<input type='button' id='memo_save' value='保存' />"+
                     "<input type='button' id='memo_delete' value='削除' />"+
                     "<input type='button' id='html_save' value='HTML' />"+
@@ -40,6 +54,7 @@
                     "<input type='button' id='ex_next' value='次へ(n)' />"+
                     "<div id='memo_status'></div>"+
                     "<style>#memo_area { vertical-align: middle; }</style>");
+                memo_set_cursor();
             }
 
             // リザルト画面
@@ -56,6 +71,7 @@
                     kh[0].children[1].insertAdjacentHTML('afterbegin',
                         "共有メモ:&nbsp;"+
                         "<textarea cols='" + col + "' rows='" + row + "' style='font-size: " + font_size + "px;' id='memo_area' placeholder='Alt+Enter to Save'>" + memo_value + "</textarea>"+
+                        "<input type='button' id='memo_num' value='番号' />"+
                         "<input type='button' id='memo_save' value='保存' />"+
                         "<input type='button' id='memo_delete' value='削除' />"+
                         "<div id='memo_status'></div>"+
@@ -68,13 +84,15 @@
 
         // Historyの色分け/曜日
         if(items.selected_hist_coloring == true) {
+            // この配色気に入ってしまった
+            // 可変にするか未検討
             const Su = "#FFB2B2";
             const Mo = "#FFB2FF";
             const Tu = "#D8B2FF";
             const We = "#B2D8FF";
             const Th = "#B2FFD8";
             const Fr = "#FFFFB2";
-            const St = "#FFD8B2";
+            const Sa = "#FFD8B2";
 
             if(tabURL.match(/https?:\/\/ping-t.com\/.*\/study_histories/)) {
                 var histories = document.getElementsByClassName('list_table');
@@ -93,7 +111,7 @@
                         else if(histories[i].children[2].innerHTML.match(/金/))
                             histories[i].style.backgroundColor = Fr;
                         else if(histories[i].children[2].innerHTML.match(/土/))
-                            histories[i].style.backgroundColor = St;
+                            histories[i].style.backgroundColor = Sa;
                     }
                 }
             }
@@ -101,23 +119,37 @@
     });
 };
 
+// 共有メモクリック時, カーソルを最後に持ってくる
 function memo_set_cursor() {
     let area = document.getElementById('memo_area');
     area.setSelectionRange(-1, -1);
 }
 
+// 番号ボタン押下時
+// '現在の問題番号' + ',' を共有メモに追記し, 保存
+function onclick_memo_num() {
+    var info = document.getElementById('mondai_info').innerHTML;
+    var num  = info.substring(info.indexOf('第')+1, info.indexOf('/'));
+
+    document.getElementById('memo_area').value += num + ',';
+    onclick_memo_save();
+}
+
+// 共有メモの保存ボタン押下時
 function onclick_memo_save() {
     chrome.storage.local.set({
         selected_memo: document.getElementById('memo_area').value,
     }, function() {
         var status = document.getElementById('memo_status');
         status.textContent = 'saved';
+
         setTimeout(function() {
           status.textContent = '';
         }, 1000);
     });
 }
 
+// 共有メモの削除ボタン押下時
 function onclick_memo_delete() {
     chrome.storage.local.set({
         selected_memo: ''
@@ -126,11 +158,14 @@ function onclick_memo_delete() {
     });
 }
 
+// HTMLボタン押下時
+// TODO
 function onclick_html_save() {
     var body = document.getElementById('ViewMondai').children[0].cloneNode(true);
     var info = document.getElementById('mondai_info').innerHTML;
     var id   = info.substr(info.indexOf('問題ID')+6, 5);
 
+    // 画像PathをBase64に変換
     //var nodes = body.querySelectorAll('[src]');
     //for(var i=0; i<nodes.length; ++i) {
     //    var url = nodes[i].src;
@@ -163,6 +198,9 @@ window.addEventListener('click', function(e) {
     if(e.target.id == 'memo_area') {
         memo_set_cursor();
     }
+    if(e.target.id == 'memo_num') {
+        onclick_memo_num();
+    }
     if(e.target.id == 'memo_save') {
         onclick_memo_save();
     }
@@ -180,6 +218,7 @@ window.addEventListener('click', function(e) {
     }
 }, false)
 
+// Alt + Enter で共有メモを保存
 window.addEventListener('keydown', function(e) {
     const key_enter = 13;
     if(e.altKey && e.keyCode == key_enter) {

@@ -10,6 +10,7 @@ function save_options() {
     var memo_row       = document.getElementById('memo_row').value;
     var memo_font_size = document.getElementById('memo_font_size').value;
     var hist_coloring  = document.getElementById('hist_coloring').checked;
+    var disp_timer     = document.getElementById('disp_timer').checked;
 
     // 背景色を指定色に変更
     document.getElementsByTagName('body')[0].style.backgroundColor = "#" + bgcolor;
@@ -24,6 +25,7 @@ function save_options() {
         selected_memo_row:       memo_row,
         selected_memo_font_size: memo_font_size,
         selected_hist_coloring:  hist_coloring,
+        selected_disp_timer:     disp_timer,
 
     }, function() {
         // 保存できたら、画面にメッセージを表示
@@ -51,6 +53,7 @@ function restore_options() {
         selected_memo_row:       '1',
         selected_memo_font_size: '',
         selected_hist_coloring:  'true',
+        selected_disp_timer:     'true',
 
     // 保存された値があったら、それを使う
     }, function(items) {
@@ -63,6 +66,7 @@ function restore_options() {
         document.getElementById('memo_row').value        = items.selected_memo_row;
         document.getElementById('memo_font_size').value  = items.selected_memo_font_size;
         document.getElementById('hist_coloring').checked = items.selected_hist_coloring;
+        document.getElementById('disp_timer').checked    = items.selected_disp_timer;
     });
 }
 
