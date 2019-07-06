@@ -10,6 +10,7 @@ window.onload = function() {
         body[0].style.cssText = "background-color: " + bgcolor + " !important;";
 
         // 全体の背景色以外の設定
+        // TODO
         //var container = document.getElementById('container');
         //container.style.backgroundColor = '#E6E6E6';
 
@@ -58,25 +59,31 @@ window.onload = function() {
             }
 
             // リザルト画面
-            if(tabURL.match(/https?:\/\/ping-t.com\/.*\/kakumon_histories/)) {
+            if(tabURL.match(/https?:\/\/ping-t.com\/.*\/kakumon_histories/)
+              || tabURL.match(/https?:\/\/ping-t.com\/.*\/view/)) {
                 let kh;
+                let button_html = "";
+
                 if(tabURL.match(/index/)) {
                     kh = document.getElementsByClassName('kakumonHistories');
                 }
                 else if(tabURL.match(/view/)) {
                     kh = document.getElementsByClassName('kakumonHistory');
+                    button_html = "<input type='button' id='html_save' value='HTML' />";
                 }
 
                 if(kh) {
                     kh[0].children[1].insertAdjacentHTML('afterbegin',
+                        "<div id='exping-t'>"+
                         "共有メモ:&nbsp;"+
                         "<textarea cols='" + col + "' rows='" + row + "' style='font-size: " + font_size + "px;' id='memo_area' placeholder='Alt+Enter to Save'>" + memo_value + "</textarea>"+
-                        "<input type='button' id='memo_num' value='番号' />"+
                         "<input type='button' id='memo_save' value='保存' />"+
                         "<input type='button' id='memo_delete' value='削除' />"+
+                        button_html +
                         "<div id='memo_status'></div>"+
                         "<style>#memo_area { vertical-align: middle; }</style>"+
-                        "<br />");
+                        "<br />"+
+                        "</div>");
                     memo_set_cursor();
                 }
             }
@@ -159,10 +166,21 @@ function onclick_memo_delete() {
 }
 
 // HTMLボタン押下時
+// TODO
 function onclick_html_save() {
-    var body = document.getElementById('ViewMondai').children[0].cloneNode(true);
-    var info = document.getElementById('mondai_info').innerHTML;
-    var id   = info.match(/問題ID\D+\d+/)[0].match(/\d+/);
+    let body;
+    let id;
+    let tabURL = window.location.href;
+
+    if(tabURL.match(/view/)) {
+        body = document.getElementsByClassName('kakumonHistory')[0].cloneNode(true);
+        id   = body.innerHTML.match(/問題ID\D+\d+/)[0].match(/\d+/);
+    }
+    else {
+        let info = document.getElementById('mondai_info').innerHTML;
+        body     = document.getElementById('ViewMondai').children[0].cloneNode(true);
+        id       = info.match(/問題ID\D+\d+/)[0].match(/\d+/);
+    }
 
     // ~~画像PathをBase64に変換~~
     //   => 画像はローカルには保存せず, インターネットから参照する
@@ -182,7 +200,17 @@ function onclick_html_save() {
         nodes[i].src = e.href;
     }
 
-    body.querySelectorAll('#kaisetu')[0].style.display = 'inline';
+    if(!tabURL.match(/view/)) {
+        // 解説の表示
+        body.querySelectorAll('#kaisetu')[0].style.display = 'inline';
+    }
+    else {
+        // 共有メモの削除
+        body.querySelectorAll('#exping-t')[0].textContent = null;
+        // 最後のチェックボックスの削除
+        body.querySelectorAll('#form_view')[0].textContent = null;
+    }
+
     var head   = '<head><meta charset="UTF-8"><title>' + id + '</title></head>';
     var blob    = new Blob(['<!DOCTYPE HTML>\n<html lang="ja">\n', head, '\n', body.innerHTML, '\n</html>']);
     var url     = window.URL || window.webkitURL;
