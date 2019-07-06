@@ -159,28 +159,28 @@ function onclick_memo_delete() {
 }
 
 // HTMLボタン押下時
-// TODO
 function onclick_html_save() {
     var body = document.getElementById('ViewMondai').children[0].cloneNode(true);
     var info = document.getElementById('mondai_info').innerHTML;
     var id   = info.match(/問題ID\D+\d+/)[0].match(/\d+/);
 
-    // 画像PathをBase64に変換
-    //var nodes = body.querySelectorAll('[src]');
-    //for(var i=0; i<nodes.length; ++i) {
-    //    var url = nodes[i].src;
-    //    var xhr = new XMLHttpRequest();
-    //    xhr.onload = function() {
-    //        var reader = new FileReader();
-    //        reader.onloadend = function() {
-    //            nodes[i].src = reader.result;
-    //        }
-    //        reader.readAsDataURL(xhr.response);
-    //    };
-    //    xhr.open('GET', url);
-    //    xhr.responseType = 'blob';
-    //    xhr.send();
-    //}
+    // ~~画像PathをBase64に変換~~
+    //   => 画像はローカルには保存せず, インターネットから参照する
+    var nodes = body.querySelectorAll('img');
+    for(let i=0; i<nodes.length; ++i) {
+        //fetch(nodes[i].src).then(function(response) {
+        //    return response.blob();
+        //}).then(function(blob) {
+        //    let fileReader = new FileReader();
+        //    fileReader.readAsDataURL(blob);
+        //    fileReader.onload = function() {
+        //        nodes[i].src = this.result;
+        //    }
+        //});
+        let e = document.createElement('a');
+        e.href = nodes[i].src;
+        nodes[i].src = e.href;
+    }
 
     body.querySelectorAll('#kaisetu')[0].style.display = 'inline';
     var head   = '<head><meta charset="UTF-8"><title>' + id + '</title></head>';
