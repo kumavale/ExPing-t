@@ -1,13 +1,16 @@
 ﻿
 window.onload = function() {
     chrome.storage.local.get(null, function(items) {
-        var bgcolor = "#" + items.selected_bgcolor;
-        var fgcolor = "#" + items.selected_fgcolor;
+        var bgcolor   = "#" + items.selected_bgcolor;
+        var fgcolor   = "#" + items.selected_fgcolor;
+        var font_bold = items.selected_font_bold;
 
-        // 全体の背景色の変更
+        // 全体の背景色,文字色,太字の変更
         var body = document.getElementsByTagName('body');
         body[0].style.cssText  = "background-color: " + bgcolor + " !important;";
         body[0].style.cssText += "color: " + fgcolor + " !important;";
+        if(font_bold == true)
+            body[0].style.cssText += "font-weight: bold !important;";
 
         // 全体の背景色以外の設定
         // TODO

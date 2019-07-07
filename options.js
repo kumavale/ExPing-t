@@ -4,6 +4,7 @@ function save_options() {
     // 設定値を変数に格納
     var bgcolor         = document.getElementById('bgcolor').value;
     var fgcolor         = document.getElementById('fgcolor').value;
+    var font_bold       = document.getElementById('font_bold').checked;
     var disp_image      = document.getElementById('disp_image').checked;
     var image_width     = document.getElementById('image_size').value;
     var disp_memo       = document.getElementById('disp_memo').checked;
@@ -22,6 +23,7 @@ function save_options() {
     chrome.storage.local.set({
         selected_bgcolor:         bgcolor,
         selected_fgcolor:         fgcolor,
+        selected_font_bold:       font_bold,
         selected_disp_image:      disp_image,
         selected_image_width:     image_width,
         selected_disp_memo:       disp_memo,
@@ -50,6 +52,7 @@ function restore_options() {
     chrome.storage.local.get({
         selected_bgcolor:         'F0F0F0',
         selected_fgcolor:         '000000',
+        selected_font_bold:       'false',
         //selected_image_right:     '',
         selected_disp_image:      'false',
         selected_image_width:     '10',
@@ -66,6 +69,7 @@ function restore_options() {
     }, function(items) {
         document.getElementById('bgcolor').value         = items.selected_bgcolor;
         document.getElementById('fgcolor').value         = items.selected_fgcolor;
+        document.getElementById('font_bold').checked     = items.selected_font_bold;
         document.getElementById('disp_image').checked    = items.selected_disp_image;
         //document.getElementById('image_right').        = items.selected_image_right;
         document.getElementById('image_size').value      = items.selected_image_width;
