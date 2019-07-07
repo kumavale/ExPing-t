@@ -1,13 +1,13 @@
-﻿// 動作確認は LPIC202 を用いています
-
+﻿
 window.onload = function() {
     chrome.storage.local.get(null, function(items) {
-        var selected_bgcolor = items.selected_bgcolor;
-        var bgcolor = "#" + selected_bgcolor;
+        var bgcolor = "#" + items.selected_bgcolor;
+        var fgcolor = "#" + items.selected_fgcolor;
 
         // 全体の背景色の変更
         var body = document.getElementsByTagName('body');
-        body[0].style.cssText = "background-color: " + bgcolor + " !important;";
+        body[0].style.cssText  = "background-color: " + bgcolor + " !important;";
+        body[0].style.cssText += "color: " + fgcolor + " !important;";
 
         // 全体の背景色以外の設定
         // TODO
@@ -46,7 +46,7 @@ window.onload = function() {
                     "<br />" +
                     "共通メモ:&nbsp;"+
                     "<textarea cols='" + col + "' rows='" + row + "' style='font-size: " + font_size + "px;' id='memo_area' placeholder='Alt+Enter to Save'>" + memo_value + "</textarea>"+
-                    "<input type='button' id='memo_num' value='番号' />"+
+                    "<input type='button' id='memo_add' value='追記' />"+
                     "<input type='button' id='memo_save' value='保存' />"+
                     "<input type='button' id='memo_delete' value='削除' />"+
                     "<input type='button' id='html_save' value='HTML' />"+
@@ -134,8 +134,15 @@ function memo_set_cursor() {
 
 // 番号ボタン押下時
 // '現在の問題番号' + ',' を共有メモに追記し, 保存
-function onclick_memo_num() {
+// /d 問題番号
+// /i 問題ID
+// 先頭が'\'はエスケープ
+function onclick_memo_add() {
+    // 初期設定を読み込む
+
     var info = document.getElementById('mondai_info').innerHTML;
+
+    // '/d' を 問題番号に変換
     var num  = info.substring(info.indexOf('第')+1, info.indexOf('/'));
 
     document.getElementById('memo_area').value += num + ',';
@@ -226,8 +233,8 @@ window.addEventListener('click', function(e) {
     if(e.target.id == 'memo_area') {
         memo_set_cursor();
     }
-    if(e.target.id == 'memo_num') {
-        onclick_memo_num();
+    if(e.target.id == 'memo_add') {
+        onclick_memo_add();
     }
     if(e.target.id == 'memo_save') {
         onclick_memo_save();
