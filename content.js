@@ -132,21 +132,39 @@ function memo_set_cursor() {
     area.setSelectionRange(-1, -1);
 }
 
-// 番号ボタン押下時
-// '現在の問題番号' + ',' を共有メモに追記し, 保存
-// /d 問題番号
-// /i 問題ID
-// 先頭が'\'はエスケープ
+// 追記ボタン押下時
+// 指定した書式を共有メモに追記し, 保存
+// %d 問題番号
+// %i 問題ID
+// 先頭が'\'はエスケープ => TODO
 function onclick_memo_add() {
-    // 初期設定を読み込む
+    chrome.storage.local.get(['selected_memo_add_format'], function(items) {
+        // 初期設定を読み込む
+        fmt = items.selected_memo_add_format;
 
-    var info = document.getElementById('mondai_info').innerHTML;
+        // fmtが定義されていなければReturn
+        if(fmt == '')
+            return;
 
-    // '/d' を 問題番号に変換
-    var num  = info.substring(info.indexOf('第')+1, info.indexOf('/'));
+        // 問題番号, 問題ID取得用の情報
+        var info = document.getElementById('mondai_info').innerHTML;
 
-    document.getElementById('memo_area').value += num + ',';
-    onclick_memo_save();
+        // '%d' を 問題番号に変換
+        if(fmt.match(/%d/)) {
+            let num = info.substring(info.indexOf('第')+1, info.indexOf('/'));
+            fmt = fmt.replace(/%d/g, num);
+        }
+
+        // '%i' を 問題IDに変換
+        if(fmt.match(/%i/)) {
+            let id = info.match(/問題ID\D+\d+/)[0].match(/\d+/);
+            fmt = fmt.replace(/%i/g, id);
+        }
+
+        // 追記して保存
+        document.getElementById('memo_area').value += fmt;
+        onclick_memo_save();
+    });
 }
 
 // 共有メモの保存ボタン押下時
@@ -251,7 +269,7 @@ window.addEventListener('click', function(e) {
     if(e.target.id == 'ex_next') {
         document.getElementById('next').click();
     }
-}, false)
+}, false);
 
 // Alt + Enter で共有メモを保存
 window.addEventListener('keydown', function(e) {
@@ -259,5 +277,5 @@ window.addEventListener('keydown', function(e) {
     if(e.altKey && e.keyCode == key_enter) {
         onclick_memo_save();
     }
-})
+});
 

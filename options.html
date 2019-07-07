@@ -2,6 +2,7 @@
 <html>
 <head>
   <title>Chrome Extension Options</title>
+  <meta charset='utf-8' />
   <script src="default.js"></script>
   <style>
     #save { padding-left: 5px; }
@@ -15,19 +16,19 @@
 <body>
     <table>
         <tr>
-            <td>Background-color:&nbsp;#</td>
-            <td><input type="text" size="6" maxlength="6" placeholder="F0F0F0" id="bgcolor"></td>
+            <td>Background-color:&nbsp;</td>
+            <td>#<input type="text" size="6" maxlength="6" placeholder="F0F0F0" id="bgcolor"></td>
         </tr>
         <tr>
-            <td>Font-color:&nbsp;#</td>
-            <td><input type="text" size="6" maxlength="6" placeholder="000000" id="fgcolor"></td>
+            <td>Font-color:&nbsp;</td>
+            <td>#<input type="text" size="6" maxlength="6" placeholder="000000" id="fgcolor"></td>
         </tr>
         <tr>
             <td>Image-display:</td>
             <td><input type="checkbox" id="disp_image"></td>
         </tr>
         <tr>
-            <td>Image-file:</td>
+            <td>Image-file(auto save):</td>
             <td><input type="file" accept='image/*' id="image_right"></td>
         </tr>
         <tr>
@@ -50,6 +51,14 @@
         <tr>
             <td>Memo-font-size:&nbsp;</td>
             <td><input type="text" size="3" maxlength="4" id="memo_font_size"></td>
+        </tr>
+        <tr>
+            <td>Memo-add-format:&nbsp;</td>
+            <td><input type="text" size="12" maxlength="16" id="memo_add_format"></td>
+        </tr>
+        <tr>
+            <td>&nbsp;&nbsp;&nbsp;%d&nbsp;:&nbsp;問題番号&nbsp;&nbsp;%i&nbsp;:&nbsp;問題ID</td>
+            <td></td>
         </tr>
         <tr>
             <td>History-coloring:&nbsp;</td>

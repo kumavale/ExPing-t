@@ -2,16 +2,17 @@
 function save_options() {
 
     // 設定値を変数に格納
-    var bgcolor        = document.getElementById('bgcolor').value;
-    var fgcolor        = document.getElementById('fgcolor').value;
-    var disp_image     = document.getElementById('disp_image').checked;
-    var image_width    = document.getElementById('image_size').value;
-    var disp_memo      = document.getElementById('disp_memo').checked;
-    var memo_col       = document.getElementById('memo_col').value;
-    var memo_row       = document.getElementById('memo_row').value;
-    var memo_font_size = document.getElementById('memo_font_size').value;
-    var hist_coloring  = document.getElementById('hist_coloring').checked;
-    var disp_timer     = document.getElementById('disp_timer').checked;
+    var bgcolor         = document.getElementById('bgcolor').value;
+    var fgcolor         = document.getElementById('fgcolor').value;
+    var disp_image      = document.getElementById('disp_image').checked;
+    var image_width     = document.getElementById('image_size').value;
+    var disp_memo       = document.getElementById('disp_memo').checked;
+    var memo_col        = document.getElementById('memo_col').value;
+    var memo_row        = document.getElementById('memo_row').value;
+    var memo_font_size  = document.getElementById('memo_font_size').value;
+    var memo_add_format = document.getElementById('memo_add_format').value;
+    var hist_coloring   = document.getElementById('hist_coloring').checked;
+    var disp_timer      = document.getElementById('disp_timer').checked;
 
     // 背景色,文字色を指定色に変更
     document.getElementsByTagName('body')[0].style.backgroundColor = "#" + bgcolor;
@@ -19,16 +20,17 @@ function save_options() {
 
     // chromeアカウントと紐づくストレージに保存
     chrome.storage.local.set({
-        selected_bgcolor:        bgcolor,
-        selected_fgcolor:        fgcolor,
-        selected_disp_image:     disp_image,
-        selected_image_width:    image_width,
-        selected_disp_memo:      disp_memo,
-        selected_memo_col:       memo_col,
-        selected_memo_row:       memo_row,
-        selected_memo_font_size: memo_font_size,
-        selected_hist_coloring:  hist_coloring,
-        selected_disp_timer:     disp_timer,
+        selected_bgcolor:         bgcolor,
+        selected_fgcolor:         fgcolor,
+        selected_disp_image:      disp_image,
+        selected_image_width:     image_width,
+        selected_disp_memo:       disp_memo,
+        selected_memo_col:        memo_col,
+        selected_memo_row:        memo_row,
+        selected_memo_font_size:  memo_font_size,
+        selected_memo_add_format: memo_add_format,
+        selected_hist_coloring:   hist_coloring,
+        selected_disp_timer:      disp_timer,
 
     }, function() {
         // 保存できたら、画面にメッセージを表示
@@ -46,18 +48,19 @@ function save_options() {
 function restore_options() {
     // デフォルト値は、ここで設定する
     chrome.storage.local.get({
-        selected_bgcolor:        'F0F0F0',
-        selected_fgcolor:        '000000',
-        //selected_image_right:    '',
-        selected_disp_image:     'false',
-        selected_image_width:    '10',
-        selected_memo:           '',
-        selected_disp_memo:      'false',
-        selected_memo_col:       '50',
-        selected_memo_row:       '1',
-        selected_memo_font_size: '',
-        selected_hist_coloring:  'true',
-        selected_disp_timer:     'true',
+        selected_bgcolor:         'F0F0F0',
+        selected_fgcolor:         '000000',
+        //selected_image_right:     '',
+        selected_disp_image:      'false',
+        selected_image_width:     '10',
+        selected_memo:            '',
+        selected_disp_memo:       'false',
+        selected_memo_col:        '50',
+        selected_memo_row:        '1',
+        selected_memo_font_size:  '',
+        selected_memo_add_format: '%d,',
+        selected_hist_coloring:   'true',
+        selected_disp_timer:      'true',
 
     // 保存された値があったら、それを使う
     }, function(items) {
@@ -70,6 +73,7 @@ function restore_options() {
         document.getElementById('memo_col').value        = items.selected_memo_col;
         document.getElementById('memo_row').value        = items.selected_memo_row;
         document.getElementById('memo_font_size').value  = items.selected_memo_font_size;
+        document.getElementById('memo_add_format').value = items.selected_memo_add_format;
         document.getElementById('hist_coloring').checked = items.selected_hist_coloring;
         document.getElementById('disp_timer').checked    = items.selected_disp_timer;
     });
