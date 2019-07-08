@@ -196,58 +196,67 @@ function onclick_memo_delete() {
 // HTMLボタン押下時
 // TODO
 function onclick_html_save() {
-    let body;
-    let id;
-    let tabURL = window.location.href;
+    chrome.storage.local.get(null, function(items) {
 
-    if(tabURL.match(/view/)) {
-        body = document.getElementsByClassName('kakumonHistory')[0].cloneNode(true);
-        id   = body.innerHTML.match(/問題ID\D+\d+/)[0].match(/\d+/);
-    }
-    else {
-        let info = document.getElementById('mondai_info').innerHTML;
-        body     = document.getElementById('ViewMondai').children[0].cloneNode(true);
-        id       = info.match(/問題ID\D+\d+/)[0].match(/\d+/);
-    }
+        let body;
+        let id;
+        let tabURL = window.location.href;
 
-    // ~~画像PathをBase64に変換~~
-    //   => 画像はローカルには保存せず, インターネットから参照する
-    var nodes = body.querySelectorAll('img');
-    for(let i=0; i<nodes.length; ++i) {
-        //fetch(nodes[i].src).then(function(response) {
-        //    return response.blob();
-        //}).then(function(blob) {
-        //    let fileReader = new FileReader();
-        //    fileReader.readAsDataURL(blob);
-        //    fileReader.onload = function() {
-        //        nodes[i].src = this.result;
-        //    }
-        //});
-        let e = document.createElement('a');
-        e.href = nodes[i].src;
-        nodes[i].src = e.href;
-    }
+        if(tabURL.match(/view/)) {
+            body = document.getElementsByClassName('kakumonHistory')[0].cloneNode(true);
+            id   = body.innerHTML.match(/問題ID\D+\d+/)[0].match(/\d+/);
+        }
+        else {
+            let info = document.getElementById('mondai_info').innerHTML;
+            body     = document.getElementById('ViewMondai').children[0].cloneNode(true);
+            id       = info.match(/問題ID\D+\d+/)[0].match(/\d+/);
+        }
 
-    if(!tabURL.match(/view/)) {
-        // 解説の表示
-        body.querySelectorAll('#kaisetu')[0].style.display = 'inline';
-    }
-    else {
-        // 共有メモの削除
-        body.querySelectorAll('#exping-t')[0].textContent = null;
-        // 最後のチェックボックスの削除
-        body.querySelectorAll('#form_view')[0].textContent = null;
-    }
+        // ~~画像PathをBase64に変換~~
+        //   => 画像はローカルには保存せず, インターネットから参照する
+        var nodes = body.querySelectorAll('img');
+        for(let i=0; i<nodes.length; ++i) {
+            //fetch(nodes[i].src).then(function(response) {
+            //    return response.blob();
+            //}).then(function(blob) {
+            //    let fileReader = new FileReader();
+            //    fileReader.readAsDataURL(blob);
+            //    fileReader.onload = function() {
+            //        nodes[i].src = this.result;
+            //    }
+            //});
+            let e = document.createElement('a');
+            e.href = nodes[i].src;
+            nodes[i].src = e.href;
+        }
 
-    var head   = '<head><meta charset="UTF-8"><title>' + id + '</title></head>';
-    var blob    = new Blob(['<!DOCTYPE HTML>\n<html lang="ja">\n', head, '\n', body.innerHTML, '\n</html>']);
-    var url     = window.URL || window.webkitURL;
-    var blobURL = url.createObjectURL(blob);
+        if(!tabURL.match(/view/)) {
+            // 解説の表示
+            body.querySelectorAll('#kaisetu')[0].style.display = 'inline';
+        }
+        else {
+            // 共有メモの削除
+            body.querySelectorAll('#exping-t')[0].textContent = null;
+            // 最後のチェックボックスの削除
+            body.querySelectorAll('#form_view')[0].textContent = null;
+        }
 
-    var a = document.createElement('a');
-    a.download = id + '.html';
-    a.href = blobURL;
-    a.click();
+        var css = '';
+        if(items.selected_color_for_html == true) {
+            let bgcolor = items.selected_bgcolor;
+            let fgcolor = items.selected_fgcolor;
+            css = '<style>body{background-color:#' + bgcolor + ';color:#' + fgcolor + ';}</style>';
+        }
+        var head    = '<head><meta charset="UTF-8"><title>' + id + '</title>' + css + '</head>';
+        var blob    = new Blob(['<!DOCTYPE HTML>\n<html lang="ja">\n', head, '\n', body.innerHTML, '\n</html>']);
+        var url     = window.URL || window.webkitURL;
+        var blobURL = url.createObjectURL(blob);
+
+        var a = document.createElement('a');
+        a.download = id + '.html';
+        a.href = blobURL;
+        a.click();
+    });
 }
 
 window.addEventListener('click', function(e) {

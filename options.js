@@ -4,6 +4,7 @@ function save_options() {
     // 設定値を変数に格納
     var bgcolor         = document.getElementById('bgcolor').value;
     var fgcolor         = document.getElementById('fgcolor').value;
+    var color_for_html  = document.getElementById('color_for_html').checked;
     var font_bold       = document.getElementById('font_bold').checked;
     var disp_image      = document.getElementById('disp_image').checked;
     var image_width     = document.getElementById('image_size').value;
@@ -23,6 +24,7 @@ function save_options() {
     chrome.storage.local.set({
         selected_bgcolor:         bgcolor,
         selected_fgcolor:         fgcolor,
+        selected_color_for_html:  color_for_html,
         selected_font_bold:       font_bold,
         selected_disp_image:      disp_image,
         selected_image_width:     image_width,
@@ -52,6 +54,7 @@ function restore_options() {
     chrome.storage.local.get({
         selected_bgcolor:         'F0F0F0',
         selected_fgcolor:         '000000',
+        selected_color_for_html:  'false',
         selected_font_bold:       'false',
         //selected_image_right:     '',
         selected_disp_image:      'false',
@@ -67,19 +70,20 @@ function restore_options() {
 
     // 保存された値があったら、それを使う
     }, function(items) {
-        document.getElementById('bgcolor').value         = items.selected_bgcolor;
-        document.getElementById('fgcolor').value         = items.selected_fgcolor;
-        document.getElementById('font_bold').checked     = items.selected_font_bold;
-        document.getElementById('disp_image').checked    = items.selected_disp_image;
-        //document.getElementById('image_right').        = items.selected_image_right;
-        document.getElementById('image_size').value      = items.selected_image_width;
-        document.getElementById('disp_memo').checked     = items.selected_disp_memo;
-        document.getElementById('memo_col').value        = items.selected_memo_col;
-        document.getElementById('memo_row').value        = items.selected_memo_row;
-        document.getElementById('memo_font_size').value  = items.selected_memo_font_size;
-        document.getElementById('memo_add_format').value = items.selected_memo_add_format;
-        document.getElementById('hist_coloring').checked = items.selected_hist_coloring;
-        document.getElementById('disp_timer').checked    = items.selected_disp_timer;
+        document.getElementById('bgcolor').value          = items.selected_bgcolor;
+        document.getElementById('fgcolor').value          = items.selected_fgcolor;
+        document.getElementById('color_for_html').checked = items.selected_color_for_html;
+        document.getElementById('font_bold').checked      = items.selected_font_bold;
+        document.getElementById('disp_image').checked     = items.selected_disp_image;
+        //document.getElementById('image_right').         = items.selected_image_right;
+        document.getElementById('image_size').value       = items.selected_image_width;
+        document.getElementById('disp_memo').checked      = items.selected_disp_memo;
+        document.getElementById('memo_col').value         = items.selected_memo_col;
+        document.getElementById('memo_row').value         = items.selected_memo_row;
+        document.getElementById('memo_font_size').value   = items.selected_memo_font_size;
+        document.getElementById('memo_add_format').value  = items.selected_memo_add_format;
+        document.getElementById('hist_coloring').checked  = items.selected_hist_coloring;
+        document.getElementById('disp_timer').checked     = items.selected_disp_timer;
     });
 }
 
