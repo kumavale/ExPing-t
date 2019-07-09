@@ -4,11 +4,28 @@
   <title>Chrome Extension Options</title>
   <meta charset='utf-8' />
   <script src="default.js"></script>
+
   <style>
     #save { padding-left: 5px; }
     td {
         border-style: none;
         white-space: nowrap;
+    }
+
+    #label_format {
+        cursor: pointer;
+        background-color: #EEEEEE;
+        padding: 1px 8px;
+        border: 1px solid #AAAAAA;
+        border-radius: 2px;
+    }
+
+    #label_format:hover {
+        border: 1px solid #777777;
+    }
+
+    #button_format {
+        display: none;
     }
   </style>
 </head>
@@ -62,10 +79,32 @@
         </tr>
         <tr>
             <td>Memo-add-format:&nbsp;</td>
-            <td><input type="text" size="12" maxlength="16" id="memo_add_format"></td>
+            <td><input type="text" size="32" maxlength="256" id="memo_add_format"></td>
         </tr>
         <tr>
-            <td>&nbsp;&nbsp;&nbsp;%d&nbsp;:&nbsp;問題番号&nbsp;&nbsp;%i&nbsp;:&nbsp;問題ID</td>
+            <!--<td>&nbsp;<input type='checkbox' id='button_format' />
+                <label id='label_format' for='button_format'>&gt;&nbsp;Format list</label>-->
+            <td>
+                <label id='label_format' for='button_format'>
+                    <input type='hidden' />
+                    &nbsp;<input type='checkbox' id='button_format' />
+                    &gt;&nbsp;Format list
+                </label>
+                <div id='format_list' style='display: none;'>
+                    <table>
+                        <tr><td>%n</td><td>問題番号</td></tr>
+                        <tr><td>%i</td><td>問題ID</td></tr>
+                        <tr><td>%Y</td><td>年</td></tr>
+                        <tr><td>%M</td><td>月</td></tr>
+                        <tr><td>%D</td><td>日</td></tr>
+                        <tr><td>%w</td><td>曜日</td></tr>
+                        <tr><td>%H</td><td>時(24)</td></tr>
+                        <tr><td>%h</td><td>時(12)</td></tr>
+                        <tr><td>%m</td><td>分</td></tr>
+                        <tr><td>%s</td><td>秒</td></tr>
+                    </table>
+                </div>
+            </td>
             <td></td>
         </tr>
         <tr>

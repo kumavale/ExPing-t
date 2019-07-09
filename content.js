@@ -137,8 +137,16 @@ function memo_set_cursor() {
 
 // 追記ボタン押下時
 // 指定した書式を共有メモに追記し, 保存
-// %d 問題番号
+// %n 問題番号
 // %i 問題ID
+// %Y 年
+// %M 月
+// %D 日
+// %w 曜日
+// %H hour(24)
+// %h hour(12)
+// %m min
+// %s sec
 // 先頭が'\'はエスケープ => TODO
 function onclick_memo_add() {
     chrome.storage.local.get(['selected_memo_add_format'], function(items) {
@@ -152,16 +160,64 @@ function onclick_memo_add() {
         // 問題番号, 問題ID取得用の情報
         var info = document.getElementById('mondai_info').innerHTML;
 
-        // '%d' を 問題番号に変換
-        if(fmt.match(/%d/)) {
+        // '%n' を 問題番号に変換
+        if(fmt.match(/%n/)) {
             let num = info.substring(info.indexOf('第')+1, info.indexOf('/'));
-            fmt = fmt.replace(/%d/g, num);
+            fmt = fmt.replace(/%n/g, num);
         }
 
         // '%i' を 問題IDに変換
         if(fmt.match(/%i/)) {
             let id = info.match(/問題ID\D+\d+/)[0].match(/\d+/);
             fmt = fmt.replace(/%i/g, id);
+        }
+
+        // '%Y' を年の数字に変換
+        if(fmt.match(/%Y/)) {
+            let year = get_time('Y');
+            fmt = fmt.replace(/%Y/g, year);
+        }
+
+        // '%M' を月の数字に変換
+        if(fmt.match(/%M/)) {
+            let month = get_time('M');
+            fmt = fmt.replace(/%M/g, month);
+        }
+
+        // '%D' を日の数字に変換
+        if(fmt.match(/%D/)) {
+            let date = get_time('D');
+            fmt = fmt.replace(/%D/g, date);
+        }
+
+        // '%w' を曜日の1文字に変換
+        if(fmt.match(/%w/)) {
+            let week = get_time('w');
+            fmt = fmt.replace(/%w/g, week);
+        }
+
+        // '%H' を24時間表記の数字に変換
+        if(fmt.match(/%H/)) {
+            let Hour = get_time('H');
+            fmt = fmt.replace(/%H/g, Hour);
+        }
+
+        // '%h' を12時間表記の数字に変換
+        if(fmt.match(/%h/)) {
+            let hour = get_time('h');
+            fmt = fmt.replace(/%h/g, hour);
+        }
+
+        // '%m' を分の数字に変換
+        if(fmt.match(/%m/)) {
+            let min = get_time('m');
+            fmt = fmt.replace(/%m/g, min);
+        }
+
+        // '%s' を秒の数字に変換
+        if(fmt.match(/%s/)) {
+            let sec = get_time('s');
+            fmt = fmt.replace(/%s/g, sec);
         }
 
         // 追記して保存
@@ -257,6 +313,40 @@ function onclick_html_save() {
         a.href = blobURL;
         a.click();
     });
+}
+
+function get_time(time) {
+    var now = new Date();
+
+    if(time == 'Y') {
+        return now.getFullYear();
+    }
+    else if(time == 'M') {
+        return now.getMonth() + 1;
+    }
+    else if(time == 'D') {
+        return now.getDate();
+    }
+    else if(time == 'w') {
+        let week = ['日','月','火','水','木','金','土'];
+        return week[now.getDay()];
+    }
+    else if(time == 'H') {
+        return now.getHours();
+    }
+    else if(time == 'h') {
+        return now.getHours() % 12;
+    }
+    else if(time == 'm') {
+        return now.getMinutes();
+    }
+    else if(time == 's') {
+        return now.getSeconds();
+    }
+    else {
+        console.log('Invalid arguments: ' + time);
+        return;
+    }
 }
 
 window.addEventListener('click', function(e) {

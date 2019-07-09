@@ -39,10 +39,8 @@ function save_options() {
     }, function() {
         // 保存できたら、画面にメッセージを表示
         var status = document.getElementById('status');
-        //status.textContent = 'Options saved.';
         status.style.visibility = "visible";
         setTimeout(function() {
-          //status.textContent = '&nbsp;';
             status.style.visibility = "hidden";
         }, 2000);
     });
@@ -64,7 +62,7 @@ function restore_options() {
         selected_memo_col:        '50',
         selected_memo_row:        '1',
         selected_memo_font_size:  '',
-        selected_memo_add_format: '%d,',
+        selected_memo_add_format: '%n:',
         selected_hist_coloring:   'true',
         selected_disp_timer:      'true',
 
@@ -91,6 +89,20 @@ function restore_options() {
 document.addEventListener('DOMContentLoaded', restore_options);
 document.getElementById('save').addEventListener('click', save_options);
 
+// 書式一覧の表示/非表示
+// Not working
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('button_format').addEventListener('change', function() {
+        var fmt = document.getElementById('button_format');
+        if(fmt.value == false) {
+            document.getElementById('format_list').style.display = 'block';
+        } else {
+            document.getElementById('format_list').style.display = 'none';
+        }
+    });
+}, false);
+
+// 画像の自動保存
 document.getElementById('image_right').addEventListener('change', function (e) {
     var file = e.target.files[0];
     var image_right;
@@ -101,6 +113,7 @@ document.getElementById('image_right').addEventListener('change', function (e) {
         chrome.storage.local.set({
             selected_image_right: image_right
         });
+        // TODO ここ良くなさそう
         document.getElementsByTagName('body')[0].insertAdjacentHTML('beforeend',
             "<style>"+
             "body {"+
