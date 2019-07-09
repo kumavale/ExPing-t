@@ -49,10 +49,10 @@ window.onload = function() {
                     "<br />" +
                     "共通メモ:&nbsp;"+
                     "<textarea cols='" + col + "' rows='" + row + "' style='font-size: " + font_size + "px;' id='memo_area' placeholder='Alt+Enter to Save'>" + memo_value + "</textarea>"+
-                    "<input type='button' id='memo_add' value='追記' />"+
+                    "<input type='button' id='memo_add' value='追記(i)' accesskey='i' />"+
                     "<input type='button' id='memo_save' value='保存' />"+
                     "<input type='button' id='memo_delete' value='削除' />"+
-                    "<input type='button' id='html_save' value='HTML' />"+
+                    "<button id='html_save' accesskey='h'><u>H</u>tml</button>"+
                     "&nbsp;&nbsp;"+
                     "<input type='button' id='ex_prev' value='戻る(p)' />"+
                     "<input type='button' id='ex_next' value='次へ(n)' />"+
@@ -72,7 +72,7 @@ window.onload = function() {
                 }
                 else if(tabURL.match(/view/)) {
                     kh = document.getElementsByClassName('kakumonHistory');
-                    button_html = "<input type='button' id='html_save' value='HTML' />";
+                    button_html = "<button id='html_save' accesskey='h'><u>H</u>tml</button>";
                 }
 
                 if(kh) {
