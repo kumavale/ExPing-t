@@ -113,16 +113,8 @@ document.getElementById('image_right').addEventListener('change', function (e) {
         chrome.storage.local.set({
             selected_image_right: image_right
         });
-        // TODO ここ良くなさそう
-        document.getElementsByTagName('body')[0].insertAdjacentHTML('beforeend',
-            "<style>"+
-            "body {"+
-                "background-image: url(" + image_right + ");"+
-                "background-position: right bottom;"+
-                "background-repeat: no-repeat;"+
-                "background-size: 25%;"+
-            "}"+
-            "</style>");
+        document.getElementsByTagName('body')[0].style.backgroundImage
+            = 'url(' + image_right + ')';
     }
     fileReader.readAsDataURL(file);
 });
