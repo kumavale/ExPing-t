@@ -90,14 +90,16 @@ document.addEventListener('DOMContentLoaded', restore_options);
 document.getElementById('save').addEventListener('click', save_options);
 
 // 書式一覧の表示/非表示
-// Not working
 document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('button_format').addEventListener('change', function() {
-        var fmt = document.getElementById('button_format');
-        if(fmt.value == false) {
-            document.getElementById('format_list').style.display = 'block';
+    document.getElementById('button_format').addEventListener('click', function() {
+        var list = document.getElementById('format_list');
+        var btn  = document.getElementById('button_format');
+        if(list.style.display == 'none') {
+            list.style.display = 'block';
+            btn.value = 'v Format list';
         } else {
-            document.getElementById('format_list').style.display = 'none';
+            list.style.display = 'none';
+            btn.value = '> Format list';
         }
     });
 }, false);

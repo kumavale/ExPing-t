@@ -17,22 +17,6 @@
         border-style: none;
         white-space: nowrap;
     }
-
-    #label_format {
-        cursor: pointer;
-        background-color: #EEEEEE;
-        padding: 1px 8px;
-        border: 1px solid #AAAAAA;
-        border-radius: 2px;
-    }
-
-    #label_format:hover {
-        border: 1px solid #777777;
-    }
-
-    #button_format {
-        display: none;
-    }
   </style>
 </head>
 
@@ -88,16 +72,13 @@
             <td><input type="text" size="32" maxlength="256" id="memo_add_format"></td>
         </tr>
         <tr>
-            <!--<td>&nbsp;<input type='checkbox' id='button_format' />
-                <label id='label_format' for='button_format'>&gt;&nbsp;Format list</label>-->
+            <td valign='top'>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <input type='button' id='button_format' value='> Format list' />
+            </td>
             <td>
-                <label id='label_format' for='button_format'>
-                    <input type='hidden' />
-                    &nbsp;<input type='checkbox' id='button_format' />
-                    &gt;&nbsp;Format list
-                </label>
                 <div id='format_list' style='display: none;'>
-                    <table>
+                    <table width='64%'>
                         <tr><td>%n</td><td>問題番号</td></tr>
                         <tr><td>%i</td><td>問題ID</td></tr>
                         <tr><td>%Y</td><td>年</td></tr>
@@ -108,10 +89,10 @@
                         <tr><td>%h</td><td>時(12)</td></tr>
                         <tr><td>%m</td><td>分</td></tr>
                         <tr><td>%s</td><td>秒</td></tr>
+                        <tr><td>%%</td><td>%</td></tr>
                     </table>
                 </div>
             </td>
-            <td></td>
         </tr>
         <tr>
             <td>History-coloring:&nbsp;</td>
