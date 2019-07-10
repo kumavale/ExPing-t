@@ -147,11 +147,12 @@ function memo_set_cursor() {
 // %h hour(12)
 // %m min
 // %s sec
-// 先頭が'\'はエスケープ => TODO
+// %% %
 function onclick_memo_add() {
     chrome.storage.local.get(['selected_memo_add_format'], function(items) {
         // 初期設定を読み込む
-        fmt = items.selected_memo_add_format;
+        let fmt = items.selected_memo_add_format;
+        let str = '';
 
         // fmtが定義されていなければReturn
         if(fmt == '')
@@ -160,68 +161,77 @@ function onclick_memo_add() {
         // 問題番号, 問題ID取得用の情報
         var info = document.getElementById('mondai_info').innerHTML;
 
-        // '%n' を 問題番号に変換
-        if(fmt.match(/%n/)) {
-            let num = info.substring(info.indexOf('第')+1, info.indexOf('/'));
-            fmt = fmt.replace(/%n/g, num);
-        }
+        for(let i=0, n=fmt.length; i<n; ++i) {
+            let c = fmt[i];
 
-        // '%i' を 問題IDに変換
-        if(fmt.match(/%i/)) {
-            let id = info.match(/問題ID\D+\d+/)[0].match(/\d+/);
-            fmt = fmt.replace(/%i/g, id);
-        }
+            if(fmt[i] == '%') {
+                ++i;
+                switch(fmt[i]) {
+                    // '%%' を '%' に変換
+                    case '%':
+                        c = '%';
+                        break;
 
-        // '%Y' を年の数字に変換
-        if(fmt.match(/%Y/)) {
-            let year = get_time('Y');
-            fmt = fmt.replace(/%Y/g, year);
-        }
+                    // '%n' を 問題番号に変換
+                    case 'n':
+                        c = info.substring(info.indexOf('第')+1, info.indexOf('/'));
+                        break;
 
-        // '%M' を月の数字に変換
-        if(fmt.match(/%M/)) {
-            let month = get_time('M');
-            fmt = fmt.replace(/%M/g, month);
-        }
+                    // '%i' を 問題IDに変換
+                    case 'i':
+                        c = info.match(/問題ID\D+\d+/)[0].match(/\d+/);
+                        break;
 
-        // '%D' を日の数字に変換
-        if(fmt.match(/%D/)) {
-            let date = get_time('D');
-            fmt = fmt.replace(/%D/g, date);
-        }
+                    // '%Y' を年の数字に変換
+                    case 'Y':
+                        c = get_time('Y');
+                        break;
 
-        // '%w' を曜日の1文字に変換
-        if(fmt.match(/%w/)) {
-            let week = get_time('w');
-            fmt = fmt.replace(/%w/g, week);
-        }
+                    // '%M' を月の数字に変換
+                    case 'M':
+                        c = get_time('M');
+                        break;
 
-        // '%H' を24時間表記の数字に変換
-        if(fmt.match(/%H/)) {
-            let Hour = get_time('H');
-            fmt = fmt.replace(/%H/g, Hour);
-        }
+                    // '%D' を日の数字に変換
+                    case 'D':
+                        c = get_time('D');
+                        break;
 
-        // '%h' を12時間表記の数字に変換
-        if(fmt.match(/%h/)) {
-            let hour = get_time('h');
-            fmt = fmt.replace(/%h/g, hour);
-        }
+                    // '%w' を曜日の1文字に変換
+                    case 'w':
+                        c = get_time('w');
+                        break;
 
-        // '%m' を分の数字に変換
-        if(fmt.match(/%m/)) {
-            let min = get_time('m');
-            fmt = fmt.replace(/%m/g, min);
-        }
+                    // '%H' を24時間表記の数字に変換
+                    case 'H':
+                        c = get_time('H');
+                        break;
 
-        // '%s' を秒の数字に変換
-        if(fmt.match(/%s/)) {
-            let sec = get_time('s');
-            fmt = fmt.replace(/%s/g, sec);
+                    // '%h' を12時間表記の数字に変換
+                    case 'h':
+                        c = get_time('h');
+                        break;
+
+                    // '%m' を分の数字に変換
+                    case 'm':
+                        c = get_time('m');
+                        break;
+
+                    // '%s' を秒の数字に変換
+                    case 's':
+                        c = get_time('s');
+                        break;
+
+                    default:
+                        console.log('Invalid param: \'%' + fmt[i] + '\'');
+                        c = '%' + fmt[i];
+                }
+            }
+            str += c;
         }
 
         // 追記して保存
-        document.getElementById('memo_area').value += fmt;
+        document.getElementById('memo_area').value += str;
         onclick_memo_save();
     });
 }
@@ -250,7 +260,8 @@ function onclick_memo_delete() {
 }
 
 // HTMLボタン押下時
-// TODO
+// TODO 模擬試験時等, 正答の表示
+// 	$("#seikai").click(function()をごにょごにょする
 function onclick_html_save() {
     chrome.storage.local.get(null, function(items) {
 

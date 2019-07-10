@@ -23,6 +23,7 @@ chromeウェブストアでの配布はしておりません
 * ~~オプション画面での画像保存の動作修正~~  
 * 時計  
 * URLのアクセス制御  
+* 中央寄せ(検討中)  
 
 ## Usage
 `git clone https://github.com/yorimoi/ExPing-t.git`  
