@@ -1,4 +1,4 @@
-# ExPing-t ![](https://github.com/yorimoi/ExPing-t/blob/master/icons/ExPing-t16.png)
+# ExPing-t ![](https://github.com/yorimoi/ExPing-t/blob/master/icons/ExPing-t48.png)
 ![under_development](https://img.shields.io/badge/-%e9%96%8b%e7%99%ba%e4%b8%ad-important.svg)  
 
 [Ping-t](https://ping-t.com/)のGoogleChrome拡張機能です.  
@@ -15,6 +15,7 @@ chromeウェブストアでの配布はしておりません
 * Historyの色分け  
 * `[戻る]` `[次へ]`ボタンを画面上部にも  
 * `[追記]`ボタン押下時, 設定した書式[<sup>[1]</sup>](#note-1)をメモに追記  
+* 経過時間表示  
 
 ## TODO (実装予定)
 * キッチンタイマー(時間指定), ストップウォッチ(自動)  
@@ -24,6 +25,7 @@ chromeウェブストアでの配布はしておりません
 * 時計  
 * URLのアクセス制御  
 * 中央寄せ(検討中)  
+* 書式に'%02d'とかの桁数指定  
 
 ## Usage
 `git clone https://github.com/yorimoi/ExPing-t.git`  

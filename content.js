@@ -18,6 +18,8 @@ window.onload = function() {
         //container.style.backgroundColor = '#E6E6E6';
 
         var mondai_info = document.getElementById('mondai_info');
+
+        // 現在のURLの取得
         let tabURL = window.location.href;
 
         // 癒し画像の表示
@@ -29,11 +31,44 @@ window.onload = function() {
         }
 
         // タイマー(ストップウォッチ)の表示
-        // TODO
+        // あえてバックグラウンドで処理せず, 読み込み時にのみ時間を
+        //     更新することによって, 問題を素早く解くことが出来ると仮定
+        // TODO 先ずは経過時間, 後にカウントダウンに対応
         if(items.selected_disp_timer == true) {
             if(mondai_info) {
+                let start_time = items.selected_start_time;
+                let prev_URL   = items.selected_prev_URL;
+                let now        = new Date();
+                let progress   = "0";
+
+                // 前のURLがpracticeじゃない && 現在のURLがpractice
+                //     タイマー開始
+                //     現在時刻を書き込む
+                if(!prev_URL.match(/practice/) && tabURL.match(/practice/)) {
+                    chrome.storage.local.set({
+                        // エポックタイムに変換して保存
+                        selected_start_time: now.getTime()
+                    });
+                }
+
+                // 前のURLがpractice && 現在のURLもpractice
+                //     タイマー継続
+                //     現在時刻との差分を表示
+                if(prev_URL.match(/practice/) && tabURL.match(/practice/)) {
+                    let diff = now.getTime() - start_time;
+                    progress = Math.floor(diff / (1000 * 60));
+                }
+
+                // デバッグ用に残しておく
+                // 前のURLがpractice && 現在のURLがpracticeじゃない
+                //     タイマー終了
+                //     現在時刻との差分を表示
+                //if(prev_URL.match(/practice/) && !tabURL.match(/practice/)) {
+                //}
+
                 mondai_info.insertAdjacentHTML('beforeend',
-                    "&nbsp;&nbsp;XX分&nbsp;経過");
+                    "<span style='display: inline-block;'>"+
+                    "&nbsp;&nbsp;" + progress + "分&nbsp;経過</span>");
             }
         }
 
@@ -126,6 +161,12 @@ window.onload = function() {
                 }
             }
         }
+
+        // 現在のURLの保存
+        chrome.storage.local.set({
+            selected_prev_URL: tabURL
+        });
+
     });
 };
 
@@ -376,6 +417,7 @@ window.addEventListener('click', function(e) {
     if(e.target.id == 'html_save') {
         onclick_html_save();
     }
+    // TODO 1問目は[戻る]ボタンが無いからエラーになる
     if(e.target.id == 'ex_prev') {
         document.getElementsByName('back')[0].click();
     }
