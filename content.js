@@ -34,6 +34,7 @@ window.onload = function() {
         // あえてバックグラウンドで処理せず, 読み込み時にのみ時間を
         //     更新することによって, 問題を素早く解くことが出来ると仮定
         // TODO 先ずは経過時間, 後にカウントダウンに対応
+        // TODO 最終的な累計時間をリザルト画面に表示
         if(items.selected_disp_timer == true) {
             if(mondai_info) {
                 let start_time = items.selected_start_time;
@@ -58,13 +59,6 @@ window.onload = function() {
                     let diff = now.getTime() - start_time;
                     progress = Math.floor(diff / (1000 * 60));
                 }
-
-                // デバッグ用に残しておく
-                // 前のURLがpractice && 現在のURLがpracticeじゃない
-                //     タイマー終了
-                //     現在時刻との差分を表示
-                //if(prev_URL.match(/practice/) && !tabURL.match(/practice/)) {
-                //}
 
                 mondai_info.insertAdjacentHTML('beforeend',
                     "<span style='display: inline-block;'>"+
@@ -105,8 +99,9 @@ window.onload = function() {
             // リザルト画面
             if(tabURL.match(/https?:\/\/ping-t.com\/.*\/kakumon_histories/)
               || tabURL.match(/https?:\/\/ping-t.com\/.*\/view/)) {
-                let kh;
+                let kh; // kakumonHistories
                 let button_html = "";
+                let endtime = "";
 
                 if(tabURL.match(/index/)) {
                     kh = document.getElementsByClassName('kakumonHistories');
@@ -116,9 +111,31 @@ window.onload = function() {
                     button_html = "<button id='html_save' accesskey='h'><u>H</u>tml</button>";
                 }
 
+                if(items.selected_disp_timer == true) {
+                    // 前のURLがpractice && 現在のURLがpracticeじゃない
+                    // つまりリザルト画面の初回起動
+                    // 現在時刻との差分を保存/表示
+                    if(items.selected_prev_URL.match(/practice/) && !tabURL.match(/practice/)) {
+                        let start_time = items.selected_start_time;
+                        let now        = new Date();
+                        let diff = now.getTime() - start_time;
+                        chrome.storage.local.set({
+                            selected_time: diff
+                        });
+                    }
+
+                    let time = items.selected_time;
+                    let min  = Math.floor(time / (1000 * 60));
+                    let sec  = Math.floor(time / 1000) % 60;
+
+                    endtime = "<span style='display: inline-block;'>"+
+                    "&nbsp;&nbsp;" + min + "分&nbsp;" + sec + "秒&nbsp;&nbsp;</span>";
+                }
+
                 if(kh) {
                     kh[0].children[1].insertAdjacentHTML('afterbegin',
                         "<div id='exping-t'>"+
+                        endtime +
                         "共有メモ:&nbsp;"+
                         "<textarea cols='" + col + "' rows='" + row + "' style='font-size: " + font_size + "px;' id='memo_area' placeholder='Alt+Enter to Save'>" + memo_value + "</textarea>"+
                         "<input type='button' id='memo_save' value='保存' />"+
