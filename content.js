@@ -80,6 +80,12 @@ window.onload = function() {
             let memo_value = items.selected_memo;
 
             if(mondai_info) {
+                // [戻る]ボタンがある時のみ, 画面上部にも[戻る]ボタンを表示
+                let prev = "&nbsp;&nbsp;";
+                if(document.getElementsByName('back')[0]) {
+                    prev = "<input type='button' id='ex_prev' value='戻る(p)' />";
+                }
+
                 mondai_info.insertAdjacentHTML('beforeend',
                     "<br />" +
                     "共通メモ:&nbsp;"+
@@ -89,7 +95,7 @@ window.onload = function() {
                     "<input type='button' id='memo_delete' value='削除' />"+
                     "<button id='html_save' accesskey='h'><u>H</u>tml</button>"+
                     "&nbsp;&nbsp;"+
-                    "<input type='button' id='ex_prev' value='戻る(p)' />"+
+                    prev +
                     "<input type='button' id='ex_next' value='次へ(n)' />"+
                     "<div id='memo_status'></div>"+
                     "<style>#memo_area { vertical-align: middle; }</style>");
@@ -189,6 +195,7 @@ function memo_set_cursor() {
 // %m min
 // %s sec
 // %% %
+// TODO %[0-9][nYMDHhms] 0-9桁の0埋め
 function onclick_memo_add() {
     chrome.storage.local.get(['selected_memo_add_format'], function(items) {
         // 初期設定を読み込む
@@ -417,7 +424,6 @@ window.addEventListener('click', function(e) {
     if(e.target.id == 'html_save') {
         onclick_html_save();
     }
-    // TODO 1問目は[戻る]ボタンが無いからエラーになる
     if(e.target.id == 'ex_prev') {
         document.getElementsByName('back')[0].click();
     }
