@@ -86,8 +86,14 @@ window.onload = function() {
             let memo_value = items.selected_memo;
 
             if(mondai_info) {
+                // 選択肢を 隠す/表す ボタン
+                let hide_show = "";
+                if(items.selected_hide_choice == true) {
+                    hide_show = "<input type='button' id='hide_show' value='現す(k)' accesskey='k' />";
+                }
+
                 // [戻る]ボタンがある時のみ, 画面上部にも[戻る]ボタンを表示
-                let prev = "&nbsp;&nbsp;";
+                let prev = "";
                 if(document.getElementsByName('back')[0]) {
                     prev = "<input type='button' id='ex_prev' value='戻る(p)' />";
                 }
@@ -96,10 +102,11 @@ window.onload = function() {
                     "<br />" +
                     "共通メモ:&nbsp;"+
                     "<textarea cols='" + col + "' rows='" + row + "' style='font-size: " + font_size + "px;' id='memo_area' placeholder='Alt+Enter to Save'>" + memo_value + "</textarea>"+
-                    "<input type='button' id='memo_add' value='追記(i)' accesskey='i' />"+
+                    "<input type='button' id='memo_add' value='追記(j)' accesskey='j' />"+
                     "<input type='button' id='memo_save' value='保存' />"+
                     "<input type='button' id='memo_delete' value='削除' />"+
                     "<button id='html_save' accesskey='h'><u>H</u>tml</button>"+
+                    hide_show +
                     "&nbsp;&nbsp;"+
                     prev +
                     "<input type='button' id='ex_next' value='次へ(n)' />"+
@@ -205,6 +212,18 @@ window.onload = function() {
         // 5秒毎に更新(未確定)
         if(items.selected_disp_clock == true) {
             setInterval(clock, 5000);
+        }
+
+        // 選択肢隠す
+        if(items.selected_hide_choice == true) {
+            if(mondai_info) {
+                let tests = document.querySelectorAll("span[id*='test']");
+                tests.forEach(function(test) {
+                    test.style.display = 'none';
+                    // spanタグの次にあるbrタグを削除
+                    test.parentNode.removeChild(test.nextElementSibling);
+                });
+            }
         }
 
         // コマ問
@@ -380,10 +399,12 @@ function onclick_html_save() {
         let id;
         let tabURL = window.location.href;
 
+        // 問題を解き終わった後のリザルト画面や検索画面から推移できる問題
         if(tabURL.match(/view/)) {
             body = document.getElementsByClassName('kakumonHistory')[0].cloneNode(true);
             id   = body.innerHTML.match(/問題ID\D+\d+/)[0].match(/\d+/);
         }
+        // 普通の問題
         else {
             let info = document.getElementById('mondai_info').innerHTML;
             body     = document.getElementById('ViewMondai').children[0].cloneNode(true);
@@ -434,6 +455,21 @@ function onclick_html_save() {
         a.download = id + '.html';
         a.href = blobURL;
         a.click();
+    });
+}
+
+// 隠す/現す ボタン押下時
+function onclick_hide_show() {
+    let tests = document.querySelectorAll("span[id*='test']");
+    tests.forEach(function(test) {
+        if(test.style.display == 'block') {
+            test.style.display = 'none';
+            document.getElementById('hide_show').value = "現す(k)";
+        }
+        else {
+            test.style.display = 'block';
+            document.getElementById('hide_show').value = "隠す(k)";
+        }
     });
 }
 
@@ -507,6 +543,9 @@ window.addEventListener('click', function(e) {
     }
     if(e.target.id == 'ex_next') {
         document.getElementById('next').click();
+    }
+    if(e.target.id == 'hide_show') {
+        onclick_hide_show();
     }
     //if(e.target.id == 'next_failed') {
     //    onclick_next_failed();
