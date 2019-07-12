@@ -219,9 +219,7 @@ window.onload = function() {
             if(mondai_info) {
                 let tests = document.querySelectorAll("span[id*='test']");
                 tests.forEach(function(test) {
-                    test.style.display = 'none';
-                    // spanタグの次にあるbrタグを削除
-                    test.parentNode.removeChild(test.nextElementSibling);
+                    test.style.visibility = 'hidden';
                 });
             }
         }
@@ -462,12 +460,12 @@ function onclick_html_save() {
 function onclick_hide_show() {
     let tests = document.querySelectorAll("span[id*='test']");
     tests.forEach(function(test) {
-        if(test.style.display == 'block') {
-            test.style.display = 'none';
+        if(test.style.visibility == 'visible') {
+            test.style.visibility = 'hidden';
             document.getElementById('hide_show').value = "現す(k)";
         }
         else {
-            test.style.display = 'block';
+            test.style.visibility = 'visible';
             document.getElementById('hide_show').value = "隠す(k)";
         }
     });
