@@ -201,6 +201,30 @@ window.onload = function() {
             }
         }
 
+        // コマ問
+        //if(tabURL.match(/comamon/)) {
+        //    let leftcolumn = document.getElementById('leftcolumn');
+        //    if(leftcolumn) {
+        //        document.getElementById('restart').insertAdjacentHTML('afterend',
+        //            "&nbsp;&nbsp;"+
+        //            "<span id='next_failed'>"+
+        //            "<input type='button' value='Next' />"+
+        //            "</span>"
+        //        );
+
+        //        let next = document.getElementsByTagName('input');
+        //        //console.log(next);
+        //        for(let i=0; i<next.length; ++i) {
+        //            if(next[i].value = "Next") {
+        //                next[i].value = "Next(n)";
+        //                next[i].accessKey = "n";
+        //            }
+        //        }
+        //        //next.value = "Next(n)";
+        //        //next.accessKey = "n";
+        //    }
+        //}
+
         // 現在のURLの保存
         chrome.storage.local.set({
             selected_prev_URL: tabURL
@@ -441,6 +465,21 @@ function get_time(time) {
     }
 }
 
+//function onclick_next_failed() {
+//    let seitouritu = document.getElementById('seitouritu').innerHTML;
+//
+//    console.log(seitouritu);
+//    if(seitouritu != '') {
+//        let mondai_no  = document.getElementById('mondai_no').innerHTML;
+//        let mondai_all = document.getElementById('mondai_all').innerHTML;
+//
+//        let no  = mondai_no.substring(mondai_no.indexOf('第')+1);
+//        let all = mondai_all.substring(mondai_all.indexOf('/')+1, mondai_all.indexOf('問'));
+//
+//        console.log("no:"+no+" all:"+all);
+//    }
+//}
+
 window.addEventListener('click', function(e) {
     if(e.target.id == 'memo_area') {
         memo_set_cursor();
@@ -463,6 +502,9 @@ window.addEventListener('click', function(e) {
     if(e.target.id == 'ex_next') {
         document.getElementById('next').click();
     }
+    //if(e.target.id == 'next_failed') {
+    //    onclick_next_failed();
+    //}
 }, false);
 
 // Alt + Enter で共有メモを保存
@@ -476,13 +518,11 @@ window.addEventListener('keydown', function(e) {
 
 // 時計 [HH:mm]
 // 5秒毎に更新(未確定)
-// TODO コマ問でエラーでる
-setInterval(clock, 5000);
-function clock() {
-    chrome.storage.local.get(['selected_disp_clock'], function(items) {
-        if(items.selected_disp_clock == true) {
-            let clock = document.getElementById('clock');
-            if(clock) {
+window.onload = chrome.storage.local.get(['selected_disp_clock'], function(items) {
+    if(items.selected_disp_clock == true) {
+        var clock = function() {
+            let c = document.getElementById('clock');
+            if(c) {
                 let now  = new Date();
                 let hour = now.getHours();
                 let min  = now.getMinutes();
@@ -491,8 +531,10 @@ function clock() {
                 if(hour < 10) hour = "0" + hour;
                 if(min  < 10) min  = "0" + min;
 
-                clock.innerHTML = "&nbsp;[" + hour + ":" + min + "]&nbsp;";
+                c.innerHTML = "&nbsp;[" + hour + ":" + min + "]&nbsp;";
             }
         }
-    });
-}
+        setInterval(clock, 5000);
+    }
+});
+
