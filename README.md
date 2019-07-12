@@ -26,6 +26,7 @@ chromeウェブストアでの配布はしておりません
 * URLのアクセス制御  
 * 中央寄せ(検討中)  
 * 書式に'%02d'とかの桁数指定  
+* コマ問で次の(間違えた)問題へのボタン  
 
 ## Usage
 `git clone https://github.com/yorimoi/ExPing-t.git` or Download ZIP  

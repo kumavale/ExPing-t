@@ -127,6 +127,8 @@ window.onload = function() {
                     // 前のURLがpractice && 現在のURLがpracticeじゃない
                     // つまりリザルト画面の初回起動
                     // 現在時刻との差分を保存/表示
+                    // TODO 模擬試験時, 最速タイム
+                    let time;
                     if(items.selected_prev_URL.match(/practice/) && !tabURL.match(/practice/)) {
                         let start_time = items.selected_start_time;
                         let now        = new Date();
@@ -134,9 +136,11 @@ window.onload = function() {
                         chrome.storage.local.set({
                             selected_time: diff
                         });
+                        time = diff;
+                    } else {
+                        time = items.selected_time;
                     }
 
-                    let time = items.selected_time;
                     let min  = Math.floor(time / (1000 * 60));
                     let sec  = Math.floor(time / 1000) % 60;
 
@@ -465,18 +469,20 @@ window.addEventListener('click', function(e) {
 window.addEventListener('keydown', function(e) {
     const key_enter = 13;
     if(e.altKey && e.keyCode == key_enter) {
+        // TODO 共有メモ表示状態のみ下記を実行
         onclick_memo_save();
     }
 });
 
 // 時計 [HH:mm]
 // 5秒毎に更新(未確定)
+// TODO コマ問でエラーでる
 setInterval(clock, 5000);
 function clock() {
     chrome.storage.local.get(['selected_disp_clock'], function(items) {
         if(items.selected_disp_clock == true) {
-            let mondai_info = document.getElementById('clock');
-            if(mondai_info) {
+            let clock = document.getElementById('clock');
+            if(clock) {
                 let now  = new Date();
                 let hour = now.getHours();
                 let min  = now.getMinutes();
@@ -485,7 +491,7 @@ function clock() {
                 if(hour < 10) hour = "0" + hour;
                 if(min  < 10) min  = "0" + min;
 
-                mondai_info.innerHTML = "&nbsp;[" + hour + ":" + min + "]&nbsp;";
+                clock.innerHTML = "&nbsp;[" + hour + ":" + min + "]&nbsp;";
             }
         }
     });
