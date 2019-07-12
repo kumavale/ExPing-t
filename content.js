@@ -201,6 +201,12 @@ window.onload = function() {
             }
         }
 
+        // 時計 [HH:mm]
+        // 5秒毎に更新(未確定)
+        if(items.selected_disp_clock == true) {
+            setInterval(clock, 5000);
+        }
+
         // コマ問
         //if(tabURL.match(/comamon/)) {
         //    let leftcolumn = document.getElementById('leftcolumn');
@@ -516,25 +522,18 @@ window.addEventListener('keydown', function(e) {
     }
 });
 
-// 時計 [HH:mm]
-// 5秒毎に更新(未確定)
-window.onload = chrome.storage.local.get(['selected_disp_clock'], function(items) {
-    if(items.selected_disp_clock == true) {
-        var clock = function() {
-            let c = document.getElementById('clock');
-            if(c) {
-                let now  = new Date();
-                let hour = now.getHours();
-                let min  = now.getMinutes();
+function clock() {
+    let c = document.getElementById('clock');
+    if(c) {
+        let now  = new Date();
+        let hour = now.getHours();
+        let min  = now.getMinutes();
 
-                // 桁を揃える
-                if(hour < 10) hour = "0" + hour;
-                if(min  < 10) min  = "0" + min;
+        // 桁を揃える
+        if(hour < 10) hour = "0" + hour;
+        if(min  < 10) min  = "0" + min;
 
-                c.innerHTML = "&nbsp;[" + hour + ":" + min + "]&nbsp;";
-            }
-        }
-        setInterval(clock, 5000);
+        c.innerHTML = "&nbsp;[" + hour + ":" + min + "]&nbsp;";
     }
-});
+}
 
