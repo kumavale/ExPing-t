@@ -33,8 +33,8 @@ window.onload = function() {
         // タイマー(ストップウォッチ)の表示
         // あえてバックグラウンドで処理せず, 読み込み時にのみ時間を
         //     更新することによって, 問題を素早く解くことが出来ると仮定
+        //     (経過時間が気になるから(個人的な意見))
         // TODO 先ずは経過時間, 後にカウントダウンに対応
-        // TODO 最終的な累計時間をリザルト画面に表示
         if(items.selected_disp_timer == true) {
             if(mondai_info) {
                 let start_time = items.selected_start_time;
@@ -64,6 +64,18 @@ window.onload = function() {
                     "<span style='display: inline-block;'>"+
                     "&nbsp;&nbsp;" + progress + "分&nbsp;経過</span>");
             }
+        }
+
+        // 時計用のタグを追加
+        if(items.selected_disp_clock == true) {
+            if(mondai_info) {
+                mondai_info.insertAdjacentHTML('beforeend',
+                    "<span id='clock' style='display: inline-block;'></span>");
+            }
+            // 他の画面にも表示予定
+
+            // 時計の初回起動
+            clock();
         }
 
         // 共通メモの表示
@@ -457,3 +469,24 @@ window.addEventListener('keydown', function(e) {
     }
 });
 
+// 時計 [HH:mm]
+// 5秒毎に更新(未確定)
+setInterval(clock, 5000);
+function clock() {
+    chrome.storage.local.get(['selected_disp_clock'], function(items) {
+        if(items.selected_disp_clock == true) {
+            let mondai_info = document.getElementById('clock');
+            if(mondai_info) {
+                let now  = new Date();
+                let hour = now.getHours();
+                let min  = now.getMinutes();
+
+                // 桁を揃える
+                if(hour < 10) hour = "0" + hour;
+                if(min  < 10) min  = "0" + min;
+
+                mondai_info.innerHTML = "&nbsp;[" + hour + ":" + min + "]&nbsp;";
+            }
+        }
+    });
+}
