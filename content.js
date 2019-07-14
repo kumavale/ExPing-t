@@ -1,5 +1,6 @@
 ﻿
-window.onload = function() {
+//window.onload = function() {
+window.addEventListener('DOMContentLoaded', function() {
     chrome.storage.local.get(null, function(items) {
         var bgcolor   = "#" + items.selected_bgcolor;
         var fgcolor   = "#" + items.selected_fgcolor;
@@ -254,7 +255,8 @@ window.onload = function() {
         });
 
     });
-};
+//};
+});
 
 // 共有メモクリック時, カーソルを最後に持ってくる
 function memo_set_cursor() {
