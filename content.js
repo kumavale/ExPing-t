@@ -102,7 +102,9 @@ window.addEventListener('DOMContentLoaded', function() {
                 mondai_info.insertAdjacentHTML('beforeend',
                     "<br />" +
                     "共通メモ:&nbsp;"+
-                    "<textarea cols='" + col + "' rows='" + row + "' style='font-size: " + font_size + "px;' id='memo_area' placeholder='Alt+Enter to Save'>" + memo_value + "</textarea>"+
+                    "<textarea cols='" + col + "' rows='" + row + "' style='font-size: " + font_size + "px;' id='memo_area' placeholder='Alt+Enter to Save'>" +
+                    memo_value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;') +
+                    "</textarea>"+
                     "<input type='button' id='memo_add' value='追記(j)' accesskey='j' />"+
                     "<input type='button' id='memo_save' value='保存' />"+
                     "<input type='button' id='memo_delete' value='削除' />"+
