@@ -1,5 +1,4 @@
-# ExPing-t ![](https://github.com/yorimoi/ExPing-t/blob/master/icons/ExPing-t48.png)
-![under_development](https://img.shields.io/badge/-%e9%96%8b%e7%99%ba%e4%b8%ad-important.svg)  
+# ExPing-t ![](https://github.com/kumavale/ExPing-t/blob/master/icons/ExPing-t48.png)
 
 [Ping-t](https://ping-t.com/)のGoogleChrome拡張機能です.  
 chromeウェブストアでの配布はしておりません  
@@ -11,30 +10,28 @@ chromeウェブストアでの配布はしておりません
 ![ss1](https://user-images.githubusercontent.com/29778890/61181198-d3608c00-a65d-11e9-8679-d4a24be12661.png)  
 
 
-## 実装済み
-* 背景色,文字色,文字の太さ の変更  
-* 画像表示  
-* 問題間共有のメモ機能  
-* HTMLの保存  
-* Historyの色分け  
-* `[戻る]` `[次へ]`ボタンを画面上部にも  
-* `[追記]`ボタン押下時, 設定した書式[<sup>[1]</sup>](#note-1)をメモに追記  
-* 経過時間表示  
-* 時計  
-* 選択肢を`[隠す/現す]`機能  
-
-## TODO (実装予定)
-* キッチンタイマー(時間指定), ストップウォッチ(自動)  
-* オプション画面で各ボタンの表示有無を細かく指定  
-* HTMLの保存時, 正解ボタン押下前や模擬試験時にも正解を表示  
-* ~~オプション画面での画像保存の動作修正~~  
-* URLのアクセス制御  
-* 中央寄せ(検討中)  
-* 書式に'%02d'とかの桁数指定  
-* ~~コマ問で次の(間違えた)問題へのボタン~~  
+## Roadmap
+- [x] 背景色,文字色,文字の太さ の変更  
+- [x] 画像表示  
+- [x] 問題間共有のメモ機能  
+- [x] HTMLの保存  
+- [x] Historyの色分け  
+- [x] `[戻る]` `[次へ]`ボタンを画面上部にも  
+- [x] `[追記]`ボタン押下時, 設定した書式[<sup>[1]</sup>](#note-1)をメモに追記  
+- [x] 経過時間表示  
+- [x] 時計  
+- [x] 選択肢を`[隠す/現す]`機能  
+- [ ] キッチンタイマー(時間指定), ストップウォッチ(自動)  
+- [ ] オプション画面で各ボタンの表示有無を細かく指定  
+- [ ] HTMLの保存時, 正解ボタン押下前や模擬試験時にも正解を表示  
+- [ ] ~~オプション画面での画像保存の動作修正~~  
+- [ ] URLのアクセス制御  
+- [ ] 中央寄せ(検討中)  
+- [ ] 書式に'%02d'とかの桁数指定  
+- [ ] ~~コマ問で次の(間違えた)問題へのボタン~~  
 
 ## Usage
-`git clone https://github.com/yorimoi/ExPing-t.git` or Download ZIP  
+`git clone https://github.com/kumavale/ExPing-t.git` or Download ZIP  
 Chromeの拡張機能画面でデベロッパーモードを `on`  
 `パッケージ化されていない拡張機能を読み込む` からフォルダをまるごと指定  
 `拡張機能のオプション` 又は アイコンをクリックし`オプション` から設定の変更が出来ます
