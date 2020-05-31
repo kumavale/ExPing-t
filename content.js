@@ -266,6 +266,11 @@ function memo_set_cursor() {
     area.setSelectionRange(-1, -1);
 }
 
+// 0埋め
+function zero_padding(num, len) {
+    return (Array(len).join('0') + num).slice(-len);
+}
+
 // 追記ボタン押下時
 // 指定した書式を共有メモに追記し, 保存
 // %n 問題番号
@@ -279,12 +284,14 @@ function memo_set_cursor() {
 // %m min
 // %s sec
 // %% %
-// TODO %[0-9][nYMDHhms] 0-9桁の0埋め
+// %[0-9]+[nYMDHhms] 桁数を指定して0埋め
 function onclick_memo_add() {
     chrome.storage.local.get(['selected_memo_add_format'], function(items) {
         // 初期設定を読み込む
         let fmt = items.selected_memo_add_format;
         let str = '';
+        let number_of_digits = 0;
+        let after_num = false;
 
         // fmtが定義されていなければReturn
         if(fmt == '')
@@ -293,10 +300,11 @@ function onclick_memo_add() {
         // 問題番号, 問題ID取得用の情報
         var info = document.getElementById('mondai_info').innerHTML;
 
-        for(let i=0, n=fmt.length; i<n; ++i) {
+        let i = 0;
+        for(let n = fmt.length; i < n; ++i) {
             let c = fmt[i];
 
-            if(fmt[i] == '%') {
+            if(fmt[i] == '%' || after_num) {
                 ++i;
                 switch(fmt[i]) {
                     // '%%' を '%' に変換
@@ -355,11 +363,30 @@ function onclick_memo_add() {
                         break;
 
                     default:
-                        console.log('Invalid param: \'%' + fmt[i] + '\'');
-                        c = '%' + fmt[i];
+                        // 数字なら桁数としてカウント
+                        if ('0' <= fmt[i] && fmt[i] <= '9') {
+                            number_of_digits = fmt[i].charCodeAt(0) - 48;
+                            while ('0' <= fmt[i+1] && fmt[i+1] <= '9') {
+                                ++i;
+                                number_of_digits = number_of_digits * 10 + (fmt[i].charCodeAt(0) - 48);
+                            }
+                            --i;
+                            after_num = true;
+                            continue;
+                        } else {
+                            console.log('Invalid param: \'%' + fmt[i] + '\'');
+                            c = '%' + fmt[i];
+                        }
                 }
             }
-            str += c;
+
+            if (0 < number_of_digits) {
+                str += zero_padding(c, number_of_digits);
+                number_of_digits = 0;
+            } else {
+                str += c;
+            }
+            after_num = false;
         }
 
         // 追記して保存
