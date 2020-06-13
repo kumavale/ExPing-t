@@ -32,39 +32,13 @@ window.addEventListener('DOMContentLoaded', function() {
         }
 
         // タイマー(ストップウォッチ)の表示
-        // あえてバックグラウンドで処理せず, 読み込み時にのみ時間を
-        //     更新することによって, 問題を素早く解くことが出来ると仮定
-        //     (経過時間が気になるから(個人的な意見))
         // TODO 先ずは経過時間, 後にカウントダウンに対応
         if(items.selected_disp_timer == true) {
             if(mondai_info) {
-                let start_time = items.selected_start_time;
-                let prev_URL   = items.selected_prev_URL;
-                let now        = new Date();
-                let progress   = "0";
-
-                // 前のURLがpracticeじゃない && 現在のURLがpractice
-                //     タイマー開始
-                //     現在時刻を書き込む
-                if(!prev_URL.match(/practice/) && tabURL.match(/practice/)) {
-                    chrome.storage.local.set({
-                        // エポックタイムに変換して保存
-                        selected_start_time: now.getTime()
-                    });
-                }
-
-                // 前のURLがpractice && 現在のURLもpractice
-                //     タイマー継続
-                //     現在時刻との差分を表示
-                if(prev_URL.match(/practice/) && tabURL.match(/practice/)) {
-                    let diff = now.getTime() - start_time;
-                    progress = Math.floor(diff / (1000 * 60));
-                }
-
                 mondai_info.insertAdjacentHTML('beforeend',
-                    "<span style='display: inline-block;'>"+
-                    "&nbsp;&nbsp;" + progress + "分&nbsp;経過</span>");
+                    "<span id='timer' style='display: inline-block;'></span>");
             }
+            timer();
         }
 
         // 時計用のタグを追加
@@ -73,8 +47,6 @@ window.addEventListener('DOMContentLoaded', function() {
                 mondai_info.insertAdjacentHTML('beforeend',
                     "<span id='clock' style='display: inline-block;'></span>");
             }
-            // 他の画面にも表示予定
-
             // 時計の初回起動
             clock();
         }
@@ -212,9 +184,15 @@ window.addEventListener('DOMContentLoaded', function() {
         }
 
         // 時計 [HH:mm]
-        // 5秒毎に更新(未確定)
+        // 5秒毎に更新
         if(items.selected_disp_clock == true) {
             setInterval(clock, 5000);
+        }
+
+        // タイマー(ストップウォッチ)の更新
+        // 5秒毎に更新
+        if(items.selected_disp_timer == true) {
+            setInterval(timer, 5000);
         }
 
         // 選択肢隠す
@@ -602,6 +580,42 @@ function clock() {
         if(min  < 10) min  = "0" + min;
 
         c.innerHTML = "&nbsp;[" + hour + ":" + min + "]&nbsp;";
+    }
+}
+
+function timer() {
+    let t = document.getElementById('timer');
+    if (t) {
+        // 現在のURLの取得
+        let tabURL = window.location.href;
+
+        chrome.storage.local.get(null, function(items) {
+            let start_time = items.selected_start_time;
+            let prev_URL   = items.selected_prev_URL;
+            let now        = new Date();
+            let progress   = "0";
+
+            // 前のURLがpracticeじゃない && 現在のURLがpractice
+            //     タイマー開始
+            //     現在時刻を書き込む
+            if(!prev_URL.match(/practice/) && tabURL.match(/practice/)) {
+                chrome.storage.local.set({
+                    // エポックタイムに変換して保存
+                    selected_start_time: now.getTime()
+                });
+            }
+
+            // 前のURLがpractice && 現在のURLもpractice
+            //     タイマー継続
+            //     現在時刻との差分を表示
+            if(prev_URL.match(/practice/) && tabURL.match(/practice/)) {
+                let diff = now.getTime() - start_time;
+                progress = Math.floor(diff / (1000 * 60));
+            }
+
+            t.innerHTML = "<span id='timer' style='display: inline-block;'>" +
+                "&nbsp;&nbsp;" + progress + "分&nbsp;経過</span>";
+        });
     }
 }
 
