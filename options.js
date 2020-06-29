@@ -17,6 +17,7 @@ function save_options() {
     var disp_timer      = document.getElementById('disp_timer').checked;
     var disp_clock      = document.getElementById('disp_clock').checked;
     var hide_choice     = document.getElementById('hide_choice').checked;
+    var number_of_ques  = document.getElementById('number_of_ques').value;
 
     // 背景色,文字色を指定色に変更
     document.getElementsByTagName('body')[0].style.backgroundColor = "#" + bgcolor;
@@ -39,6 +40,7 @@ function save_options() {
         selected_disp_timer:      disp_timer,
         selected_disp_clock:      disp_clock,
         selected_hide_choice:     hide_choice,
+        selected_number_of_ques:  number_of_ques,
 
     }, function() {
         // 保存できたら、画面にメッセージを表示
@@ -71,6 +73,7 @@ function restore_options() {
         selected_disp_timer:      'true',
         selected_disp_clock:      'false',
         selected_hide_choice:     'false',
+        selected_number_of_ques:  '',
 
     // 保存された値があったら、それを使う
     }, function(items) {
@@ -90,6 +93,7 @@ function restore_options() {
         document.getElementById('disp_timer').checked     = items.selected_disp_timer;
         document.getElementById('disp_clock').checked     = items.selected_disp_clock;
         document.getElementById('hide_choice').checked    = items.selected_hide_choice;
+        document.getElementById('number_of_ques').value   = items.selected_number_of_ques;
     });
 }
 
