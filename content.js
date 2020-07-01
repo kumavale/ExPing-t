@@ -207,12 +207,14 @@ window.addEventListener('DOMContentLoaded', function() {
 
         // 問題数指定
         if(items.selected_number_of_ques != "") {
-            let number_of_ques = items.selected_number_of_ques;
             let sitei_cnt = document.getElementsByName("sitei_cnt")[0];
-            let option = document.createElement('option');
-            option.value = number_of_ques;
-            option.innerHTML = number_of_ques + "問";
-            sitei_cnt.insertBefore(option, sitei_cnt.firstChild);
+            if (sitei_cnt) {
+                let number_of_ques = items.selected_number_of_ques;
+                let option = document.createElement('option');
+                option.value = number_of_ques;
+                option.innerHTML = number_of_ques + "問";
+                sitei_cnt.insertBefore(option, sitei_cnt.firstChild);
+            }
         }
 
         // コマ問
