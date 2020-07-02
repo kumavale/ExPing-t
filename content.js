@@ -1,6 +1,5 @@
 ﻿
-var ALARM_SECOND;      // アラームの総秒数
-var ALARM_INTERVAL_ID; // アラーム解除用のID
+var ALARM_INTERVAL_ID;  // アラーム解除用のID
 
 window.addEventListener('DOMContentLoaded', function() {
     chrome.storage.local.get(null, function(items) {
@@ -58,10 +57,6 @@ window.addEventListener('DOMContentLoaded', function() {
         // アラーム(キッチンタイマー)の表示
         if ((0 < items.selected_alarm_minutes) || (0 < items.selected_alarm_hours)) {
             if(mondai_info) {
-                let hour = items.selected_alarm_hours;
-                let min  = items.selected_alarm_minutes;
-                // 秒数の初期化
-                ALARM_SECOND = hour * 3600 + min * 60;
                 mondai_info.insertAdjacentHTML('beforeend',
                     "<span id='alarm' style='display: inline-block;'></span>");
             }
@@ -642,18 +637,53 @@ function timer() {
 function alarm() {
     let a = document.getElementById('alarm');
     if (a) {
-        let hour = Math.floor(ALARM_SECOND / 3600);
-        let min  = Math.floor(ALARM_SECOND / 60 % 60);
-        let sec  = Math.floor(ALARM_SECOND % 60 % 60);
+        // 現在のURLの取得
+        let tabURL = window.location.href;
 
-        a.innerText = "{" + hour + ":" + min + ":" + sec + "}";
+        chrome.storage.local.get(null, function(items) {
+            let prev_URL   = items.selected_prev_URL;
 
-        if (ALARM_SECOND <= 0) {
-            alert("Time is up!");
-            clearInterval(ALARM_INTERVAL_ID);
-        }
+            // 前のURLがpracticeじゃない && 現在のURLがpractice
+            //     アラーム始動
+            //     秒数の初期化
+            if(!prev_URL.match(/practice/) && tabURL.match(/practice/)) {
+                let hour = items.selected_alarm_hours;
+                let min  = items.selected_alarm_minutes;
+                let alarm_second = hour * 3600 + min * 60;
 
-        ALARM_SECOND--;
+                chrome.storage.local.set({
+                    alarm_second: alarm_second,
+                    alarm_enabled: true,
+                });
+
+                hour = Math.floor(alarm_second / 3600);
+                min  = Math.floor(alarm_second / 60 % 60);
+                sec  = Math.floor(alarm_second % 60 % 60);
+                a.innerText = "{" + hour + ":" + min + ":" + sec + "}";
+
+            } else {
+                let alarm_second = items.alarm_second;
+
+                if (alarm_second <= 0) {
+                    if (items.alarm_enabled) {
+                        alert("Time is up!");
+                        clearInterval(ALARM_INTERVAL_ID);
+                        chrome.storage.local.set({ alarm_enabled: false });
+                    }
+                    a.innerText = "{Time is up}";
+                    return;
+                }
+
+                let hour = Math.floor(alarm_second / 3600);
+                let min  = Math.floor(alarm_second / 60 % 60);
+                let sec  = Math.floor(alarm_second % 60 % 60);
+
+                a.innerText = "{" + hour + ":" + min + ":" + sec + "}";
+
+                alarm_second--;
+                chrome.storage.local.set({ alarm_second: alarm_second });
+            }
+        });
     }
 }
 
