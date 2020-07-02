@@ -1,6 +1,7 @@
-﻿var ALARM_INTERVAL_ID; // アラーム解除用のID
+﻿
+var ALARM_SECOND;      // アラームの総秒数
+var ALARM_INTERVAL_ID; // アラーム解除用のID
 
-//window.onload = function() {
 window.addEventListener('DOMContentLoaded', function() {
     chrome.storage.local.get(null, function(items) {
         var bgcolor   = "#" + items.selected_bgcolor;
@@ -60,9 +61,7 @@ window.addEventListener('DOMContentLoaded', function() {
                 let hour = items.selected_alarm_hours;
                 let min  = items.selected_alarm_minutes;
                 // 秒数の初期化
-                chrome.storage.local.set({
-                    alarm_second: hour * 3600 + min * 60
-                });
+                ALARM_SECOND = hour * 3600 + min * 60;
                 mondai_info.insertAdjacentHTML('beforeend',
                     "<span id='alarm' style='display: inline-block;'></span>");
             }
@@ -643,22 +642,18 @@ function timer() {
 function alarm() {
     let a = document.getElementById('alarm');
     if (a) {
-        chrome.storage.local.get(null, function(items) {
-            let alarm_second = items.alarm_second;
-            let hour = Math.floor(alarm_second / 3600);
-            let min  = Math.floor(alarm_second / 60 % 60);
-            let sec  = Math.floor(alarm_second % 60 % 60);
+        let hour = Math.floor(ALARM_SECOND / 3600);
+        let min  = Math.floor(ALARM_SECOND / 60 % 60);
+        let sec  = Math.floor(ALARM_SECOND % 60 % 60);
 
-            a.innerText = "{" + hour + ":" + min + ":" + sec + "}";
+        a.innerText = "{" + hour + ":" + min + ":" + sec + "}";
 
-            if (alarm_second <= 0) {
-                alert("Time is up!");
-                clearInterval(ALARM_INTERVAL_ID);
-            }
+        if (ALARM_SECOND <= 0) {
+            alert("Time is up!");
+            clearInterval(ALARM_INTERVAL_ID);
+        }
 
-            alarm_second -= 1;
-            chrome.storage.local.set({ alarm_second: alarm_second });
-        });
+        ALARM_SECOND--;
     }
 }
 
