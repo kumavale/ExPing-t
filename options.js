@@ -16,6 +16,8 @@ function save_options() {
     var hist_coloring   = document.getElementById('hist_coloring').checked;
     var disp_timer      = document.getElementById('disp_timer').checked;
     var disp_clock      = document.getElementById('disp_clock').checked;
+    var alarm_hours     = document.getElementById('alarm_hours').value;
+    var alarm_minutes   = document.getElementById('alarm_minutes').value;
     var hide_choice     = document.getElementById('hide_choice').checked;
     var number_of_ques  = document.getElementById('number_of_ques').value;
 
@@ -39,6 +41,8 @@ function save_options() {
         selected_hist_coloring:   hist_coloring,
         selected_disp_timer:      disp_timer,
         selected_disp_clock:      disp_clock,
+        selected_alarm_hours:     alarm_hours,
+        selected_alarm_minutes:   alarm_minutes,
         selected_hide_choice:     hide_choice,
         selected_number_of_ques:  number_of_ques,
 
@@ -72,6 +76,8 @@ function restore_options() {
         selected_hist_coloring:   'true',
         selected_disp_timer:      'true',
         selected_disp_clock:      'false',
+        selected_alarm_hours:     '0',
+        selected_alarm_minutes:   '0',
         selected_hide_choice:     'false',
         selected_number_of_ques:  '',
 
@@ -92,6 +98,8 @@ function restore_options() {
         document.getElementById('hist_coloring').checked  = items.selected_hist_coloring;
         document.getElementById('disp_timer').checked     = items.selected_disp_timer;
         document.getElementById('disp_clock').checked     = items.selected_disp_clock;
+        document.getElementById('alarm_hours').value      = items.selected_alarm_hours;
+        document.getElementById('alarm_minutes').value    = items.selected_alarm_minutes;
         document.getElementById('hide_choice').checked    = items.selected_hide_choice;
         document.getElementById('number_of_ques').value   = items.selected_number_of_ques;
     });

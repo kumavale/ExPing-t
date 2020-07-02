@@ -1,4 +1,5 @@
-﻿
+﻿var ALARM_INTERVAL_ID; // アラーム解除用のID
+
 //window.onload = function() {
 window.addEventListener('DOMContentLoaded', function() {
     chrome.storage.local.get(null, function(items) {
@@ -32,13 +33,14 @@ window.addEventListener('DOMContentLoaded', function() {
         }
 
         // タイマー(ストップウォッチ)の表示
-        // TODO 先ずは経過時間, 後にカウントダウンに対応
         if(items.selected_disp_timer == true) {
             if(mondai_info) {
                 mondai_info.insertAdjacentHTML('beforeend',
                     "<span id='timer' style='display: inline-block;'></span>");
             }
             timer();
+            // 5秒毎に更新
+            setInterval(timer, 5000);
         }
 
         // 時計用のタグを追加
@@ -47,8 +49,26 @@ window.addEventListener('DOMContentLoaded', function() {
                 mondai_info.insertAdjacentHTML('beforeend',
                     "<span id='clock' style='display: inline-block;'></span>");
             }
-            // 時計の初回起動
             clock();
+            // 5秒毎に更新
+            setInterval(clock, 5000);
+        }
+
+        // アラーム(キッチンタイマー)の表示
+        if ((0 < items.selected_alarm_minutes) || (0 < items.selected_alarm_hours)) {
+            if(mondai_info) {
+                let hour = items.selected_alarm_hours;
+                let min  = items.selected_alarm_minutes;
+                // 秒数の初期化
+                chrome.storage.local.set({
+                    alarm_second: hour * 3600 + min * 60
+                });
+                mondai_info.insertAdjacentHTML('beforeend',
+                    "<span id='alarm' style='display: inline-block;'></span>");
+            }
+            alarm();
+            // 1秒毎に更新
+            ALARM_INTERVAL_ID = setInterval(alarm, 1000);
         }
 
         // 共通メモの表示
@@ -183,18 +203,6 @@ window.addEventListener('DOMContentLoaded', function() {
             }
         }
 
-        // 時計 [HH:mm]
-        // 5秒毎に更新
-        if(items.selected_disp_clock == true) {
-            setInterval(clock, 5000);
-        }
-
-        // タイマー(ストップウォッチ)の更新
-        // 5秒毎に更新
-        if(items.selected_disp_timer == true) {
-            setInterval(timer, 5000);
-        }
-
         // 選択肢隠す
         if(items.selected_hide_choice == true) {
             if(mondai_info) {
@@ -216,6 +224,7 @@ window.addEventListener('DOMContentLoaded', function() {
                 sitei_cnt.insertBefore(option, sitei_cnt.firstChild);
             }
         }
+
 
         // コマ問
         //if(tabURL.match(/comamon/)) {
@@ -627,6 +636,28 @@ function timer() {
 
             t.innerHTML = "<span id='timer' style='display: inline-block;'>" +
                 "&nbsp;&nbsp;" + progress + "分&nbsp;経過</span>";
+        });
+    }
+}
+
+function alarm() {
+    let a = document.getElementById('alarm');
+    if (a) {
+        chrome.storage.local.get(null, function(items) {
+            let alarm_second = items.alarm_second;
+            let hour = Math.floor(alarm_second / 3600);
+            let min  = Math.floor(alarm_second / 60 % 60);
+            let sec  = Math.floor(alarm_second % 60 % 60);
+
+            a.innerText = "{" + hour + ":" + min + ":" + sec + "}";
+
+            if (alarm_second <= 0) {
+                alert("Time is up!");
+                clearInterval(ALARM_INTERVAL_ID);
+            }
+
+            alarm_second -= 1;
+            chrome.storage.local.set({ alarm_second: alarm_second });
         });
     }
 }
