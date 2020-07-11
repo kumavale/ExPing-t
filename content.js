@@ -55,14 +55,28 @@ window.addEventListener('DOMContentLoaded', function() {
         }
 
         // アラーム(キッチンタイマー)の表示
-        if ((0 < items.selected_alarm_minutes) || (0 < items.selected_alarm_hours)) {
-            if(mondai_info) {
-                mondai_info.insertAdjacentHTML('beforeend',
-                    "<span id='alarm' style='display: inline-block;'></span>");
-            }
+        if (((0 < items.selected_alarm_minutes) || (0 < items.selected_alarm_hours)) && mondai_info) {
+            mondai_info.insertAdjacentHTML('beforeend',
+                "<span id='alarm' style='display: inline-block;'></span>");
+            // アラーム時間の初期表示
             alarm();
             // 1秒毎に更新
             ALARM_INTERVAL_ID = setInterval(alarm, 1000);
+            // クリック時に 一時停止/再開 する
+            document.getElementById('alarm').addEventListener('click', function() {
+                chrome.storage.local.get(null, function(items) {
+                    chrome.storage.local.set({ alarm_pause: !items.alarm_pause });
+                });
+            });
+        } else {
+            let hour = items.selected_alarm_hours;
+            let min  = items.selected_alarm_minutes;
+            let alarm_second = hour * 3600 + min * 60;
+
+            chrome.storage.local.set({
+                alarm_second:  alarm_second,
+                alarm_enabled: false,
+            });
         }
 
         // 共通メモの表示
@@ -652,8 +666,9 @@ function alarm() {
                 let alarm_second = hour * 3600 + min * 60;
 
                 chrome.storage.local.set({
-                    alarm_second: alarm_second,
+                    alarm_second:  alarm_second,
                     alarm_enabled: true,
+                    alarm_pause:   false,
                 });
 
                 hour = Math.floor(alarm_second / 3600);
@@ -680,8 +695,12 @@ function alarm() {
 
                 a.innerText = "{" + hour + ":" + min + ":" + sec + "}";
 
-                alarm_second--;
-                chrome.storage.local.set({ alarm_second: alarm_second });
+                if (!items.alarm_pause) {
+                    alarm_second--;
+                    chrome.storage.local.set({ alarm_second: alarm_second });
+                } else {
+                    a.innerHTML = "<s>" + a.innerHTML + "</s>";
+                }
             }
         });
     }
