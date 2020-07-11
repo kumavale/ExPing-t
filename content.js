@@ -33,22 +33,20 @@ window.addEventListener('DOMContentLoaded', function() {
         }
 
         // タイマー(ストップウォッチ)の表示
-        if(items.selected_disp_timer == true) {
-            if(mondai_info) {
-                mondai_info.insertAdjacentHTML('beforeend',
-                    "<span id='timer' style='display: inline-block;'></span>");
-            }
+        if(items.selected_disp_timer == true && mondai_info) {
+            mondai_info.insertAdjacentHTML('beforeend',
+                "<span id='timer' style='display: inline-block;'></span>");
+            // タイマーの初期表示
             timer();
             // 5秒毎に更新
             setInterval(timer, 5000);
         }
 
         // 時計用のタグを追加
-        if(items.selected_disp_clock == true) {
-            if(mondai_info) {
-                mondai_info.insertAdjacentHTML('beforeend',
-                    "<span id='clock' style='display: inline-block;'></span>");
-            }
+        if(items.selected_disp_clock == true && mondai_info) {
+            mondai_info.insertAdjacentHTML('beforeend',
+                "<span id='clock' style='display: inline-block;'></span>");
+            // 時計の初期表示
             clock();
             // 5秒毎に更新
             setInterval(clock, 5000);
@@ -67,15 +65,6 @@ window.addEventListener('DOMContentLoaded', function() {
                 chrome.storage.local.get(null, function(items) {
                     chrome.storage.local.set({ alarm_pause: !items.alarm_pause });
                 });
-            });
-        } else {
-            let hour = items.selected_alarm_hours;
-            let min  = items.selected_alarm_minutes;
-            let alarm_second = hour * 3600 + min * 60;
-
-            chrome.storage.local.set({
-                alarm_second:  alarm_second,
-                alarm_enabled: false,
             });
         }
 
